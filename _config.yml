@@ -14,32 +14,32 @@ timezone: America/New_York
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: Kapil Sharma # the main title
+title: Cho Hwan # the main title
 
-tagline: Making GPUs Go Brrr # it will display as the sub-title
+tagline: 안녕하세요, 노초환입니다🙂 # it will display as the sub-title
 
 description: >- # used by seo meta and the atom feed
-  This is the website/technical blog of Kapil Sharma. I work at Meta on the Pytorch team.
+  This is the website/technical blog of Cho Hwan.
 
 # Fill in the protocol & hostname for your site.
 # e.g. 'https://username.github.io', note that it does not end with a '/'.
-url: "https://kapilsh.github.io"
+url: "https://cho-hwan.github.io"
 
 github:
-  username: kapilsh # change to your github username
+  username: cho-hwan # change to your github username
 
 twitter:
-  username: kapil_sh_ # change to your twitter username
+  username: Cho_Hwan_Ro # change to your twitter username
 
 social:
   # Change to your full name.
   # It will be displayed as the default author of the posts and the copyright owner in the Footer
-  name: Kapil Sharma
+  name: Cho Hwan
   links:
     # The first element serves as the copyright owner's link
-    - https://twitter.com/kapil_sh_ # change to your twitter homepage
-    - https://github.com/kapilsh # change to your github homepage
-    - https://www.linkedin.com/in/sharma-k
+    - https://x.com/Cho_Hwan_Ro_ # change to your twitter homepage
+    - https://github.com/cho-hwan # change to your github homepage
+    - https://www.linkedin.com/in/chohwan-ro-628761335/
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
 
@@ -110,7 +110,7 @@ comments:
   provider: 
   # The provider options are as follows:
   disqus:
-    shortname: kapilsharmadev
+    shortname: chohwandev
   # utterances settings › https://utteranc.es/
   utterances:
     repo: # <gh-username>/<repo>
