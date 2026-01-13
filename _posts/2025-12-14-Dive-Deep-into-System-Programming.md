@@ -362,7 +362,7 @@ _우리가 흔히 컴퓨터 구조나 ARM Cortex-A(리눅스 돌아가는 고성
 ### 정적 라이브러리(Static Library)와 동적 라이브러리(Shared Library)
 
 
-<p align="center"> <img src="/assets/post/2025-12-14-Dive-Deep-into-System-Programming/linuxLibraryExtension.gif" width="400" height="200"/> </p>
+![linux_library_extention](/assets/post/2025-12-14-Dive-Deep-into-System-Programming/linuxLibraryExtension.gif)
 
 링킹 방식에 따라 라이브러리 활용법이 다릅니다.
 
