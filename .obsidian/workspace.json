@@ -1,0 +1,206 @@
+{
+  "main": {
+    "id": "57aa4701ee9e99fb",
+    "type": "split",
+    "children": [
+      {
+        "id": "8f4a9b8de45e823a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "0fbb9f1a5aa4359d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "_posts/2025-12-14-Dive-Deep-into-System-Programming.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2025-12-14-Dive-Deep-into-System-Programming"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "6f928dc18c4a9fcc",
+    "type": "split",
+    "children": [
+      {
+        "id": "cebc12dd28a5837f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "acaf84fc4ef3aab9",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "파일 탐색기"
+            }
+          },
+          {
+            "id": "ec92240fc1c0a18b",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "tag:#How",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "검색"
+            }
+          },
+          {
+            "id": "4b12ef0be348cfb1",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "북마크"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "0ec7f3dd2fbecd4f",
+    "type": "split",
+    "children": [
+      {
+        "id": "73f34e964f234b47",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d971e2b9b2f70d4f",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "_posts/2025-12-14-Dive-Deep-into-System-Programming.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "2025-12-14-Dive-Deep-into-System-Programming 의 백링크"
+            }
+          },
+          {
+            "id": "f11d6f32cacaeab2",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "_posts/2025-12-14-Dive-Deep-into-System-Programming.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "2025-12-14-Dive-Deep-into-System-Programming 의 나가는 링크"
+            }
+          },
+          {
+            "id": "ff65bbf72d0915dd",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "태그"
+            }
+          },
+          {
+            "id": "096f6d2ccd2c6fa1",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "모든 속성"
+            }
+          },
+          {
+            "id": "dc55ba18fa5c21fd",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "_posts/2025-12-14-Dive-Deep-into-System-Programming.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "2025-12-14-Dive-Deep-into-System-Programming 의 개요"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:빠른 전환기 열기": false,
+      "graph:그래프 뷰 열기": false,
+      "canvas:새 캔버스 만들기": false,
+      "daily-notes:오늘의 일일 노트 열기": false,
+      "templates:템플릿 삽입": false,
+      "command-palette:명령어 팔레트 열기": false,
+      "bases:새 베이스 생성하기": false
+    }
+  },
+  "active": "acaf84fc4ef3aab9",
+  "lastOpenFiles": [
+    "assets/profile_avatar.jpg",
+    "_posts/2025-12-14-Dive-Deep-into-System-Programming.md",
+    "_posts/2024-09-04-deep-dive-into-triton-internals-3.md",
+    "_site/posts/Dive-Deep-into-System-Programming/index.html",
+    "_site/posts/Dive-Deep-into-System-Programming",
+    "_site/posts",
+    "_site/categories/lecture-notes/index.html",
+    "_site/categories/lecture-notes",
+    "_site/tags/lecture/index.html",
+    "_site/tags/lecture",
+    "_site/tags/system/index.html",
+    "_site/tags/system",
+    "_site/tags/isa/index.html",
+    "_posts/2024-12-16-transformers-for-recsys-3.md",
+    "_posts/2025-12-31-learn-cutlass-the-hard-way-2.md",
+    "_posts/2017-03-05-geometry-of-regression.md",
+    "_posts/2018-05-16-how-to-zmq-proxy.md"
+  ]
+}
