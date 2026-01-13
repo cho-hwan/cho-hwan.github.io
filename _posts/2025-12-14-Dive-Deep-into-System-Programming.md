@@ -25,8 +25,7 @@ author: ch
 
 ## _X86-64의 탄생_
   
-
-<img src="/assets/post/2025-12-14-Dive-Deep-into-System-Programming/motherboard.gif" width="800" height="400"/>
+![motherboard_animation](/assets/post/2025-12-14-Dive-Deep-into-System-Programming/motherboard.gif)
 
 컴퓨터 전공자가 아니더라도 '메인보드'는 익숙한 용어일 것입니다. 컴퓨터는 기본적으로 0과 1, 즉 **이진(Binary) 데이터**로 동작하며, 메인보드에 장착된 모든 프로세서와 메모리는 이 데이터의 송수신을 통해 상호작용합니다.
 
@@ -320,7 +319,6 @@ _우리가 흔히 컴퓨터 구조나 ARM Cortex-A(리눅스 돌아가는 고성
     - **Symbol Resolution(심볼 해석):** 각 Symbol Reference를 하나의 Symbol Definition와 연결합니다.
         
     - **Relocation(재배치):** 여러 코드와 데이터 섹션을 하나의 섹션으로 합치고, 심볼의 주소를 실제 메모리 주소로 변경합니다.
-
 
 ### Object File(목적 파일)의 종류
 
