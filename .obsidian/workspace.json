@@ -183,8 +183,12 @@
       "bases:새 베이스 생성하기": false
     }
   },
-  "active": "5d00a491f35a3b2e",
+  "active": "acaf84fc4ef3aab9",
   "lastOpenFiles": [
+    "_includes/_site/footer.html",
+    "_includes/_site/album_backup.html",
+    "_includes/_site/album.html",
+    "_includes/_site",
     "_site/about/index.html",
     "_site/about",
     "_site/ALBUM/index.html",
@@ -192,10 +196,6 @@
     "_site/archives/index.html",
     "_site/archives",
     "_site/tags/index.html",
-    "_site/categories/index.html",
-    "_site/posts/DIRTYBULK/index.html",
-    "_site/posts/Hello,-RISC-V!/index.html",
-    "_site/posts/Dive-Deep-into-System-Programming/index.html",
     "_site/assets/profile_avatar.jpg",
     "_site/assets/post/2026-01-17-Hello,-RISC-V!/spongeBob_meme.jpg",
     "_site/assets/post/2026-01-17-Hello,-RISC-V!/single_cycle.webp",

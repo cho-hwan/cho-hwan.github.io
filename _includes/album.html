@@ -199,14 +199,27 @@ function changeSlide(button, n) {
   color: white;
   font-weight: bold;
   font-size: 20px;
-  background-color: rgba(0,0,0,0.2);
   z-index: 10;
   user-select: none;
   border-radius: 4px;
+
+  /* ★ 버튼 기본 스타일 제거 및 복구 ★ */
+  background-color: rgba(0,0,0,0.2); /* 배경색 다시 지정 */
+  border: none;                     /* 회색 테두리 제거 */
+  outline: none;                    /* 클릭 시 생기는 파란 테두리 제거 */
+  appearance: none;                 /* 브라우저 기본 외형 제거 */
+  display: flex;                    /* 화살표 중앙 정렬 */
+  align-items: center;
+  justify-content: center;
 }
+
 .next { right: 5px; }
 .prev { left: 5px; }
-.prev:hover, .next:hover { background-color: rgba(0,0,0,0.7); }
+
+.prev:hover, .next:hover { 
+  background-color: rgba(0,0,0,0.7); 
+  color: white; /* 텍스트 색상 유지 */
+}
 
 /* 카드 내용 */
 .card-content { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
