@@ -1,0 +1,46 @@
+categories:
+  # Research Sector
+  - name: Research
+    id: research
+    icon: 📄
+    subcategories:
+      ## Project
+      - name: 🛠️ Project
+        id: project
+        images:
+          # 2025 ---------------------------------------------------------------------------------------
+          - description: "로봇항공기 대회(AAM Tech)"
+            date: "2025.07.19"
+            image_list:
+              - link: /assets/album/2025_AAM/dragon_flight2.jpg
+              - link: /assets/album/2025_AAM/me1.jpg
+              - link: /assets/album/2025_AAM/poster.jpg
+      ## Conference
+      - name: 🤝 Conference
+        id: conference
+        images:
+          # 2026 ------------------------------------------------------------------------------------------
+          - description: "2026년 KROS 학회"
+            date: "2026.02.12"
+            image_list:
+              - link: /assets/album/2026_KROS/me.jpg
+              - link: /assets/album/2026_KROS/poster.jpg
+
+  # Personal
+  - name: Life Log
+    id: life_log
+    icon: 📚
+    subcategories:
+      ## Bookshelf
+      - name: "📚 Bookshelf"
+        id: bookshelf
+        images:
+          # 2026 ------------------------------------------------------------------------------------------
+          - description: "Computer Organization And Design: RISC-V [2 ed.]"
+            date: "2026.01.17"
+            image_list:
+              - link: /assets/album/book/computer_organization_and_design/1.jpg
+          - description: "Programming Massively Parallel Processors: A Hands-on Approach [4 ed.]"
+            date: "2026.02.09"
+            image_list:
+              - link: /assets/album/book/programming_massively__parallel_processors/1.jpg

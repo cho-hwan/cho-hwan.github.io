@@ -1,0 +1,219 @@
+<div class="album-container">
+  
+  <div class="album-nav-box">
+    <h2 class="album-nav-title">Album Categories</h2>
+    <ul class="album-nav-list">
+      {% for category in site.data.album.categories %}
+        <li class="nav-item">
+          <a href="#{{ category.id | slugify }}" class="nav-link main-cat">{{ category.icon }} {{ category.name }}</a>
+          {% if category.subcategories %}
+            <ul class="sub-nav-list">
+              {% for subcategory in category.subcategories %}
+                <li><a href="#{{ subcategory.id | slugify }}" class="nav-link sub-cat">{{ subcategory.name }}</a></li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  {% for category in site.data.album.categories %}
+    <div class="category-section">
+      <h2 class="category-title" id="{{ category.id | slugify }}">
+        {{ category.icon }} {{ category.name }}
+      </h2>
+      <hr class="category-divider">
+      
+      {% if category.subcategories %}
+        {% for subcategory in category.subcategories %}
+          <div class="subcategory-wrapper">
+            <h3 class="subcategory-title" id="{{ subcategory.id | slugify }}"># {{ subcategory.name }}</h3>
+            
+            <div class="album-grid">
+              {% for item in subcategory.images %}
+                <div class="album-card">
+                  <div class="slideshow-container" data-index="0">
+                    {% for image in item.image_list %}
+                      <div class="slide fade">
+                        <img src="{{ image.link | relative_url }}" alt="{{ item.description }}">
+                      </div>
+                    {% endfor %}
+                    
+                    {% if item.image_list.size > 1 %}
+                      <a class="prev" onclick="changeSlide(this, -1)">&#10094;</a>
+                      <a class="next" onclick="changeSlide(this, 1)">&#10095;</a>
+                    {% endif %}
+                  </div>
+
+                  <div class="card-content">
+                    <p class="card-desc">{{ item.description }}</p>
+                    <p class="card-date">{{ item.date }}</p>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  let slideshows = document.querySelectorAll(".slideshow-container");
+  slideshows.forEach((slideshow) => {
+    let slides = slideshow.querySelectorAll(".slide");
+    if(slides.length > 0) {
+        slides.forEach((slide, i) => {
+        slide.style.display = (i === 0) ? "block" : "none";
+        slide.style.opacity = (i === 0) ? "1" : "0";
+        });
+        slideshow.dataset.index = 0;
+    }
+  });
+});
+
+function changeSlide(button, n) {
+  let slideshow = button.parentElement;
+  let slides = slideshow.querySelectorAll(".slide");
+  let currentIndex = parseInt(slideshow.dataset.index);
+
+  // 현재 슬라이드 숨기기
+  slides[currentIndex].style.opacity = "0";
+  setTimeout(() => { slides[currentIndex].style.display = "none"; }, 300); // 페이드 효과랑 맞춤
+
+  currentIndex += n;
+  if (currentIndex >= slides.length) { currentIndex = 0; }  
+  if (currentIndex < 0) { currentIndex = slides.length - 1; }  
+
+  // 다음 슬라이드 보이기
+  slides[currentIndex].style.display = "block";
+  // 약간의 딜레이 후 opacity 변경 (부드러운 전환 위해)
+  setTimeout(() => { slides[currentIndex].style.opacity = "1"; }, 10);
+  
+  slideshow.dataset.index = currentIndex;
+}
+</script>
+
+<style>
+/* 전체 컨테이너 */
+.album-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* 네비게이션 박스 스타일 */
+.album-nav-box {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 40px;
+  border: 1px solid #eee;
+}
+.album-nav-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 10px; }
+.album-nav-list { list-style: none; margin-left: 0; padding-left: 0; }
+.sub-nav-list { list-style: circle; margin-left: 20px; margin-top: 5px; }
+.nav-link { text-decoration: none; color: #333; transition: color 0.2s; }
+.nav-link:hover { color: #3273dc; }
+.main-cat { font-weight: 600; }
+.sub-cat { font-size: 0.95rem; color: #666; }
+
+/* 섹션 스타일 */
+.category-section { margin-bottom: 60px; }
+.category-title { font-size: 1.8rem; font-weight: bold; margin-bottom: 10px; color: #333; }
+.category-divider { border: 0; border-top: 2px solid #dbdbdb; margin: 10px 0 30px 0; }
+.subcategory-wrapper { margin-bottom: 50px; }
+.subcategory-title { font-size: 1.4rem; font-weight: 600; margin-bottom: 20px; color: #555; }
+
+/* 핵심: Grid Layout (반응형 4열) */
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 기본 4열 */
+  gap: 20px; /* 카드 사이 간격 */
+}
+
+/* 반응형 처리: 화면 줄어들면 3열 -> 2열 -> 1열 */
+@media (max-width: 1024px) { .album-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px)  { .album-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px)  { .album-grid { grid-template-columns: 1fr; } }
+
+/* 카드 스타일 */
+.album-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+.album-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* 슬라이드쇼 영역 */
+.slideshow-container {
+  position: relative;
+  width: 100%;
+  padding-top: 75%; /* 4:3 비율 고정 (높이 확보) */
+  background-color: #eee;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.4s ease-in-out;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 이미지가 비율 유지하며 꽉 차게 */
+}
+
+/* 화살표 버튼 */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 10px;
+  margin-top: -22px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  background-color: rgba(0,0,0,0.3);
+  user-select: none;
+  z-index: 10;
+}
+.next { right: 0; border-radius: 3px 0 0 3px; }
+.prev:hover, .next:hover { background-color: rgba(0,0,0,0.8); }
+
+/* 카드 텍스트 내용 */
+.card-content {
+  padding: 15px;
+  flex-grow: 1; /* 높이 맞춤 */
+}
+.card-desc {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+  line-height: 1.4;
+  color: #333;
+}
+.card-date {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: auto;
+}
+</style>
