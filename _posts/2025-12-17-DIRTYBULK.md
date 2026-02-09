@@ -2,11 +2,11 @@
 title: DIRTYBULK
 description: On-campus security issues
 date: 2025-12-17
-categories: IT인프라팀
+categories:
+  - IT인프라팀
 tags:
   - security
 pin: false
-draft: false
 author: ch
 ---
 
