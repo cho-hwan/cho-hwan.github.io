@@ -142,31 +142,32 @@ if (ID/EX.MemRead and
 ![Multieple clock cycle pipeline diagrams](/assets/post/2026-01-17-Hello,-RISC-V!/data_hazard_single_clock_cycle_pipeline_diagrams.png)
 ### Control Hazard
 
+{: .prompt-info}
+>Data Hazard만큼 자주 일어나지 않지만, Data Hazard의 Fowarding 같은 완벽한 해결책이 없기 때문에 더 복잡해질 수 있습니다.
+
 파이프라인이 계속 일하기 위해서는 매 클럭마다 명령어가 `fetch`되어야 하는데, 지금의 설계대로라면 `branch`에 대한 결정이 `MEM`단계에 이루어집니다. 이렇게 `fetch`할 명령어를 결정하는 일이 늦어지는 현상을 `Control Hazard`라고 합니다.
 
+#### Always Taken(one of Static branch prediction)
 
+분기가 일어나지 않는다고 가정하고, 일어나면 이전에 발생했던 `IF`, `ID`. `EX`를 `Flush`해버리는 방식입니다. `Load-Use Data Hazard`의 경우처럼 기존 제어값을 0으로 바꾸면 되는데, 버려야 하는 명령어가 1개에서 3개로 바뀐 점이 다릅니다.
 
-#### Static Branch Prediction
-{: .prompt-info}
->Instruction fetch delay를 의미한다. Data Hazard만큼 자주 일어나지 않지만, Data Hazard의 Fowarding 같은 완벽한 해결책이 없기 때문에 복잡합니다.
+분기가 일어날 확률이 절반 정도 되고 명령어를 버리는 비용이 거의 없다면 이 최적화 방법은 `Control Hazard`의 비용을 절반으로 줄입니다.
 
+그러나 파이프라인이 깊어질수록 `branch`손실이 증가하고, 현대 프로세서에서 표준이 된 `Superscalar`방식에서 큰 복잡성을 만들고 `branch`손실을 증가시킬 수 있습니다.  
+####  Dynamic branch Prediction
+
+코어 내부에 `SRAM`기반 `Branch Prediction Buff`구성하여 만들어 이 명령어가 이전에 `branch`여부를 조사합니다. **1Bit Prediction** 은 연속된 `branch`속에서 한 번 `branch`하지 않으면 2번 예측에 실패하는 단점이 있는데, 이 같은 약점을 보완하기 위해 두번 연속 예측에 실패해야 Buffer Data가 바뀌는 **2Bit Prediction**이 있습니다.
+
+이 외에도 Correlating Predictor, Tournament Predictor가 있는데.. 프로세서의 성격에 맞춰서 사용된다고 합니다.
 
 {: .prompt-tip}
->시각화 팁
->![Multieple clock cycle pipeline diagrams](/assets/post/2026-01-17-Hello,-RISC-V!/miltiple_clock_cycle_pipeline_diagrams.png)
->**1. Multieple clock cycle pipeline diagrams:** 시간 흐름에 따른 명령어 간의 실행 순서와 Hazard/Stall 발생 여부를 한눈에 파악할 때 사용합니다.
->
->**2. single clock cycle pipeline diagrams:** 특정 순간의 Datapath 세부 상태와 Control Signal이 올바르게 작동하는지 정밀하게 분석할 때 사용합니다.
+>위 방식대로 진행할 경우, 분기 목적지 계산에 1 Cycle이 사용되는데, 이는 BTB를 사용하여 해결할 수 있습니다.
+
+{: .prompt-tip}
+>RISC-V에서는, `Conditional Branch` 명령어를 줄이는 방법으로 `Conditional Move`명령어를 사용하는 방법도 있습니다. `move`명령어는 `rs1`, `rs2`, `rd`로 이루어지는데, Buffer를 확인하고 ID/EX.registerRd를 중간에 변경해버리는 방식으로 구현됩니다.  그러나 해당 방식의 ISA를 사용하려면 Zicond(Custom Extension: Conditional Operations)를 추가하거나, 직접 손을 봐야합니다.
 
 
-#### Ddynamic Branch Prediction
-
-1. branch prediction buffer를 이용: 분기 명령어 주소의 하위 비트에 의해 인덱스되는 작은 메모리. 최근 분기가 일어났는지 그렇지 않은지를 나타내는 비트(1bit, 2bit)를 가지고있음. 그렇지만 여러 딜레마를 가지고있음
-	1. 이를 해결하기 위해 correlating predictor, tournament predictor이 존재. correlating predictor는 2개의 2bit predocctor를 사용하는데 직전에 실행된 분기 명령어가 분기를 했냐 안했냐에 따라 두 예측기 중 하나를 선택한다.
-	2. tournament predictor는 각각의 분기에 대해 다수의 예측기를 사용하여 어떤 예측기가 가장 좋은 결과를 내는지 추적하는 예측기이다
-	- Conditional move로도 조건부 분기 명령어를 줄일 수 있다. RISC-V에는 2023년에 'Zicond'라는 표준 확장이 비준되었다.
-
-#### Exception
+### Exception
 
 제어에서 가장 어려운 부분이 `Exception/Interrupt` 구현이라고 합니다. 실제로는 아래 표와 같이 굉장히 다양한 예외가 존재하는데요, 포스팅에서는 정의 안된 명령어의 실행과 하드웨어의 오작동으로 발생하는 예외만 다루겠습니다.
 
