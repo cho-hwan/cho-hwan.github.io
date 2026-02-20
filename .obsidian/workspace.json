@@ -185,8 +185,9 @@
   },
   "active": "5d00a491f35a3b2e",
   "lastOpenFiles": [
-    "_tabs/about.md",
     "_posts/2026-01-17-Hello, RISC-V!.md",
+    "_posts/2025-12-14-Dive-Deep-into-System-Programming.md",
+    "_tabs/about.md",
     "_site/assets/post/2026-01-17-Hello,-RISC-V!/dynamic_scheduling_pipeline_units.png",
     "assets/post/2026-01-17-Hello,-RISC-V!/dynamic_scheduling_pipeline_units.png",
     "assets/profile_avatar.jpg",
@@ -210,7 +211,6 @@
     "_posts/2025-12-17-DIRTYBULK.md",
     "_site/posts/Hello,-RISC-V!/index.html",
     "_site/posts/Hello,-RISC-V!",
-    "_posts/2025-12-14-Dive-Deep-into-System-Programming.md",
     "_tabs/ALBUM.md",
     "_posts/index.md",
     "datapath_with_controls_to_handle_exceptions.md",
