@@ -13,30 +13,15 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_posts/2026-01-17-Hello, RISC-V!.md",
+                "file": "_posts/2025-12-14-Dive-Deep-into-System-Programming.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-01-17-Hello, RISC-V!"
-            }
-          },
-          {
-            "id": "f08864e2d3abe5da",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "_posts/2026-01-17-Hello, RISC-V!.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "2026-01-17-Hello, RISC-V!"
+              "title": "2025-12-14-Dive-Deep-into-System-Programming"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -198,34 +183,35 @@
       "bases:새 베이스 생성하기": false
     }
   },
-  "active": "f08864e2d3abe5da",
+  "active": "5d00a491f35a3b2e",
   "lastOpenFiles": [
-    "assets/post/2026-01-17-Hello,-RISC-V!/miltiple_clock_cycle_pipeline_diagrams.png",
+    "_tabs/about.md",
     "_posts/2026-01-17-Hello, RISC-V!.md",
+    "_site/assets/post/2026-01-17-Hello,-RISC-V!/dynamic_scheduling_pipeline_units.png",
+    "assets/post/2026-01-17-Hello,-RISC-V!/dynamic_scheduling_pipeline_units.png",
+    "assets/profile_avatar.jpg",
+    "assets/post/2026-01-17-Hello,-RISC-V!/dynamic_scheduling_pipeline_units.md",
+    "_site/assets/post/2026-01-17-Hello,-RISC-V!/dynamic_scheduling_pipeline_units.md",
+    "_site/assets/post/2026-01-17-Hello,-RISC-V!/dynamic_scheduling_pipeline_units",
+    "assets/post/2026-01-17-Hello,-RISC-V!/dynamic_scheduling_pipeline_units",
+    "_site/assets/post/2026-01-17-Hello,-RISC-V!/dynamicpipelinescheduling-1200x795.png",
+    "assets/post/2026-01-17-Hello,-RISC-V!/dynamicpipelinescheduling-1200x795.png",
+    "assets/post/2026-01-17-Hello,-RISC-V!/Unconfirmed 236329.crdownload",
+    "_site/assets/post/2026-01-17-Hello,-RISC-V!/Unconfirmed 118504.crdownload",
+    "assets/post/2026-01-17-Hello,-RISC-V!/Unconfirmed 118504.crdownload",
+    "_site/assets/post/2026-01-17-Hello,-RISC-V!/Unconfirmed 122525.crdownload",
+    "assets/post/2026-01-17-Hello,-RISC-V!/Unconfirmed 122525.crdownload",
+    "_site/assets/album/book/programming_massively__parallel_processors/1.png",
+    "assets/album/book/programming_massively__parallel_processors/1.png",
+    "_site/assets/album/book/programming_massively__parallel_processors/Screenshot from 2026-02-12 21-45-57.png",
+    "assets/album/book/programming_massively__parallel_processors/Screenshot from 2026-02-12 21-45-57.png",
+    "_site/assets/album/2025_CJ/KakaoTalk_20260209_112934741_03.jpg",
+    "assets/post/2026-01-17-Hello,-RISC-V!/Unconfirmed 706015.crdownload",
     "_posts/2025-12-17-DIRTYBULK.md",
     "_site/posts/Hello,-RISC-V!/index.html",
     "_site/posts/Hello,-RISC-V!",
-    "_site/posts/Dive-Deep-into-System-Programming/index.html",
-    "_site/posts/Dive-Deep-into-System-Programming",
-    "_site/categories/personal/index.html",
-    "_site/categories/personal",
-    "_site/categories/lecture-notes/index.html",
-    "_site/categories/lecture-notes",
-    "_site/categories/learn/index.html",
-    "_site/categories/learn",
     "_posts/2025-12-14-Dive-Deep-into-System-Programming.md",
-    "_site/assets/profile_avatar.jpg",
-    "_site/assets/post/2026-01-17-Hello,-RISC-V!/spongeBob_meme.jpg",
-    "_site/assets/post/2026-01-17-Hello,-RISC-V!/single_cycle.webp",
-    "_site/assets/post/2026-01-17-Hello,-RISC-V!/singleCycle.png",
-    "_site/assets/post/2026-01-17-Hello,-RISC-V!/pipelining.png",
-    "_site/assets/post/2026-01-17-Hello,-RISC-V!/miltiple_clock_cycle_pipeline_diagrams.png",
-    "_site/assets/post/2026-01-17-Hello,-RISC-V!/memory_chipt_structure.png",
-    "_site/assets/post/2026-01-17-Hello,-RISC-V!/datapath_with_controls_to_handle_exceptions.png",
-    "_site/assets/post/2026-01-17-Hello,-RISC-V!/data_hazard_single_clock_cycle_pipeline_diagrams.png",
-    "_site/assets/post/2026-01-17-Hello,-RISC-V!/Load-use_data_hazard.png",
     "_tabs/ALBUM.md",
-    "_tabs/about.md",
     "_posts/index.md",
     "datapath_with_controls_to_handle_exceptions.md",
     "_site/datapath_with_controls_to_handle_exceptions.md",

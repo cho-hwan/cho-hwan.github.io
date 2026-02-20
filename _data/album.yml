@@ -25,6 +25,7 @@ categories:
             image_list:
               - link: /assets/album/2026_KROS/me.jpg
               - link: /assets/album/2026_KROS/poster.jpg
+              - link: /assets/album/2026_KROS/memory_in_sparo.png
 
   # Personal
   - name: Life Log
@@ -43,4 +44,4 @@ categories:
           - description: "Programming Massively Parallel Processors: A Hands-on Approach [4 ed.]"
             date: "2026.02.09"
             image_list:
-              - link: /assets/album/book/programming_massively__parallel_processors/1.jpg
+              - link: /assets/album/book/programming_massively__parallel_processors/1.png

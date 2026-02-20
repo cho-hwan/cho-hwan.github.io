@@ -19,7 +19,7 @@ author: ch
 
 **그렇다면 왜 수많은 아키텍처 중 하필 RISC-V일까요?**
 
-일단 X86-64는 제외했습니다. uops가 있다곤 하지만 시작부터 너무 비대한 아키텍쳐를 공부하면 제대로 소화하지 못할 것 같았습니다.
+일단 X86-64는 제외했습니다. micro operation이 있다곤 하지만 시작부터 너무 비대한 아키텍쳐를 공부하면 제대로 소화하지 못할 것 같았습니다.
 
 RISC 기반 아키텍처는 원리적인 면에서는 비슷비슷합니다. 그렇지만 저는 굳이 복잡한 상업적 제약이 걸린 폐쇄적인 아키텍처를 붙잡고 씨름하고 싶지 않았습니다. 특히 RTL 레벨의 설계 경험이 있는 입장에서, 가장 밑바닥까지 투명하게 파고들 수 있는 RISC-V를 선택하는 것이 기본기를 다지기 가장 좋은 길이라 판단했습니다.
 
@@ -57,7 +57,7 @@ RISC 기반 아키텍처는 원리적인 면에서는 비슷비슷합니다. 그
 >**3. 연산과 메모리 접근의 철저한 분리:** RISC-V는 모든 연산은 레지스터에서만 수행하고, 메모리 접근은 `Load/Store` 명령어로 격리합니다. 이를 통해 값비싼 메모리 지연이 시스템 성능을 저하시키는 것을 방지합니다.
 
 {: .prompt-info}
->x86-64 아키텍처는 가변길이 명령어의 고질적인 Decoding 병목&전력 소모를 해결하기 위해, 한 번 변환된 명령어 조각들을 `uOp Cache`에 저장합니다. 이는 파이프라이닝, 비순차 실행(Out-of-Order), 슈퍼스칼라 구조를 RISC-V와 유사한 수준의 효율로 구현할 수 있게 만들어주지만 `uOps`에서 발생하는 물리적인 전력 낭비와 추가적인 Latency 문제에서 자유롭지 못하고, 이 점은 x86 아키텍쳐 대비 RISC 아키텍쳐가 가지는 매우 중요한 장점입니다.
+>x86-64 아키텍처는 가변길이 명령어의 고질적인 Decoding 병목&전력 소모를 해결하기 위해, 한 번 변환된 명령어 조각들을 `μOps Cache`에 저장합니다. 이는 파이프라이닝, 비순차 실행(Out-of-Order), 슈퍼스칼라 구조를 RISC-V와 유사한 수준의 효율로 구현할 수 있게 만들어주지만 `μOps`에서 발생하는 물리적인 전력 낭비와 추가적인 Latency 문제에서 자유롭지 못하고, 이 점은 x86 아키텍쳐 대비 RISC 아키텍쳐가 가지는 매우 중요한 장점입니다.
 
 ### Structural Hazard
 
@@ -147,18 +147,24 @@ if (ID/EX.MemRead and
 
 파이프라인이 계속 일하기 위해서는 매 클럭마다 명령어가 `fetch`되어야 하는데, 지금의 설계대로라면 `branch`에 대한 결정이 `MEM`단계에 이루어집니다. 이렇게 `fetch`할 명령어를 결정하는 일이 늦어지는 현상을 `Control Hazard`라고 합니다.
 
-#### Always Taken(one of Static branch prediction)
+{: .prompt-info}
+>파이프라인이 길어지고 Superscalar 실행에 Dynamic Branch Prediction이 적용되면서 지연 분기는 없어도 그만이 되어버렸습니다.
+
+#### Always Taken(Static Branch Prediction)
 
 분기가 일어나지 않는다고 가정하고, 일어나면 이전에 발생했던 `IF`, `ID`. `EX`를 `Flush`해버리는 방식입니다. `Load-Use Data Hazard`의 경우처럼 기존 제어값을 0으로 바꾸면 되는데, 버려야 하는 명령어가 1개에서 3개로 바뀐 점이 다릅니다.
 
 분기가 일어날 확률이 절반 정도 되고 명령어를 버리는 비용이 거의 없다면 이 최적화 방법은 `Control Hazard`의 비용을 절반으로 줄입니다.
 
 그러나 파이프라인이 깊어질수록 `branch`손실이 증가하고, 현대 프로세서에서 표준이 된 `Superscalar`방식에서 큰 복잡성을 만들고 `branch`손실을 증가시킬 수 있습니다.  
-####  Dynamic branch Prediction
+####  Dynamic Branch Prediction
+
+{: .prompt-tip}
+>90년대 초에는 dynamic branch predicton이 너무 많은 자원을 차지하여 고성능 컴퓨터에서도 쓰이지 않았습니다. 그러나 트랜지스터 수가 계속 증가되고  논리 회로가 메모리보다 훨씬 더 빨라지면서 Multiple Functional Unit을 칩 안에 더 때려박을 수 있게되었고 결과적으로 Multiple Issue와 Dynamic Branch Prediction을 사용할 수 있게 되었죠
 
 코어 내부에 `SRAM`기반 `Branch Prediction Buff`구성하여 만들어 이 명령어가 이전에 `branch`여부를 조사합니다. **1Bit Prediction** 은 연속된 `branch`속에서 한 번 `branch`하지 않으면 2번 예측에 실패하는 단점이 있는데, 이 같은 약점을 보완하기 위해 두번 연속 예측에 실패해야 Buffer Data가 바뀌는 **2Bit Prediction**이 있습니다.
 
-이 외에도 Correlating Predictor, Tournament Predictor가 있는데.. 프로세서의 성격에 맞춰서 사용된다고 합니다.
+이 외에도 Correlating Predictor, Tournament Predictor가 있는데.. 프로세서의 성격에 맞춰서 사용됩니다.
 
 {: .prompt-tip}
 >위 방식대로 진행할 경우, 분기 목적지 계산에 1 Cycle이 사용되는데, 이는 BTB를 사용하여 해결할 수 있습니다.
@@ -166,30 +172,82 @@ if (ID/EX.MemRead and
 {: .prompt-tip}
 >RISC-V에서는, `Conditional Branch` 명령어를 줄이는 방법으로 `Conditional Move`명령어를 사용하는 방법도 있습니다. `move`명령어는 `rs1`, `rs2`, `rd`로 이루어지는데, Buffer를 확인하고 ID/EX.registerRd를 중간에 변경해버리는 방식으로 구현됩니다.  그러나 해당 방식의 ISA를 사용하려면 Zicond(Custom Extension: Conditional Operations)를 추가하거나, 직접 손을 봐야합니다.
 
-
 ### Exception
 
 제어에서 가장 어려운 부분이 `Exception/Interrupt` 구현이라고 합니다. 실제로는 아래 표와 같이 굉장히 다양한 예외가 존재하는데요, 포스팅에서는 정의 안된 명령어의 실행과 하드웨어의 오작동으로 발생하는 예외만 다루겠습니다.
 
 그리고 포스팅에서는 원인이 내부에 있건 외부에 있건 구별 없이 제어 흐름에서의 예기치 못한 변화를 지칭할 때 `Exception`이라 지칭하고, 사건이 외부적인 요인으로 일어날 경우에만 `Interrupt`용어를 사용하겠습니다.
 
-| **분류 (명칭)**                            | **발생 원인 (Trigger)**                                               | **대표적인 실제 사례**                                           |
-| -------------------------------------- | ----------------------------------------------------------------- | -------------------------------------------------------- |
-| **Interrupt**<br>(Timer Interrupt)     | `mtime` 레지스터 값이 `mtimecmp` 값보다<br>크거나 같을 때                        | OS 스케줄러가 멀티태스킹을 위해 현재<br>프로세스를 중단하고 Context Switch 하는 경우 |
-| **Interrupt**<br>(External Interrupt)  | PLIC(Platform-Level Interrupt Controller)<br>를 통해 외부 장치 신호가 들어올 때 | 키보드 입력, 네트워크 패킷 도착 등<br>주변 장치가 처리를 요청할 때                 |
-| **Exception**<br>(Environment Call)    | `ECALL` 명령어 실행                                                    | 사용자 프로그램이 OS 커널(시스템 콜)을<br>호출할 때                         |
-| **Exception**<br>(Page Fault)          | 가상 메모리 변환(Virtual Address Translation)<br>실패 또는 권한 위반 시           | 메모리에 로드되지 않은 페이지에 접근하거나<br>(Swap) 읽기 전용 페이지에 쓰기를 시도할 때   |
-| **Exception**<br>(Illegal Instruction) | 디코더가 알 수 없는 Opcode를 만났거나,<br>권한 없는 CSR에 접근할 때                     | 지원하지 않는 확장 명령어를 실행하거나,<br>손상된 바이너리를 실행할 때                |
+| **분류 (명칭)**                            | **발생 원인 (Trigger)**                                                 | **대표적인 실제 사례**                                           |
+| -------------------------------------- | ------------------------------------------------------------------- | -------------------------------------------------------- |
+| **Interrupt**<br>(Timer Interrupt)     | `mtime` 레지스터 값이 `mtimecmp` 값보다<br>크거나 같을 때                          | OS 스케줄러가 멀티태스킹을 위해 현재<br>프로세스를 중단하고 Context Switch 하는 경우 |
+| **Interrupt**<br>(External Interrupt)  | `PLIC(Platform-Level Interrupt Controller)`<br>를 통해 외부 장치 신호가 들어올 때 | 키보드 입력, 네트워크 패킷 도착 등<br>주변 장치가 처리를 요청할 때                 |
+| **Exception**<br>(Environment Call)    | `ECALL` 명령어 실행                                                      | 사용자 프로그램이 OS 커널(시스템 콜)을<br>호출할 때                         |
+| **Exception**<br>(Page Fault)          | 가상 메모리 변환(Virtual Address Translation)<br>실패 또는 권한 위반 시             | 메모리에 로드되지 않은 페이지에 접근하거나<br>(Swap) 읽기 전용 페이지에 쓰기를 시도할 때   |
+| **Exception**<br>(Illegal Instruction) | 디코더가 알 수 없는 Opcode를 만났거나,<br>권한 없는 `CSR`에 접근할 때                     | 지원하지 않는 확장 명령어를 실행하거나,<br>손상된 바이너리를 실행할 때                |
 
-프로세서의 예외 처리 과정은 사람의 대처 방식과 크게 다르지 않습니다. CPU가 `Exception`이나 `Interrupt`를 감지하면, 즉시 문제가 발생한 명령어의 주소를 SEPC(Supervisor Exception Program Counter) 레지스터에 저장하고, 그 원인을 SCAUSE(Supervisor Exception Cause) 레지스터에 기록합니다.
+CPU가 `Exception`이나 `Interrupt`를 감지하면, 하드웨어 레벨에서 즉시 문제가 발생한 명령어의 주소를 `sepc(Supervisor Exception Program Counter)` 레지스터에 저장하고, 그 원인을 `scause(Supervisor Exception Cause)` 레지스터에 원인을 기록합니다.
 
-그 후 하드웨어는 PC 값을 미리 지정된 예외 처리 주소(예: `1C09 0000`)로 덮어써서 제어권을 운영체제로 넘깁니다. 바통을 이어받은 운영체제는 SCAUSE를 확인해 상황을 `Trap`, `Fault`, `Abort` 으로 분류하고, 시스템 콜 같은 서비스를 제공하거나 오류를 보고하고 프로그램을 종료하는 등 적절한 조치를 취합니다. 만약 실행을 재개하기로 결정했다면, 저장해 둔 SEPC 값을 참조하여 다시 실행할 위치로 복귀합니다.
+![privilege mode](/assets/post/2026-01-17-Hello,-RISC-V!/privilege_mode.png)
+
+그리고 CPU는 현재 `Privilege` 를 `U-Mode(User Mode)`에서 `S-Mode(Supervisor Mode)`로 변경함과 동시에, `stvec` 값을 보고 `PC`를 변경합니다.
+
+$$\text{stvec} = [\quad \text{BASE (Address: 30bit)} \quad ] \quad [\ \text{MODE (2bit)}\ ]$$
+
+{: .prompt-tip}
+>- **stvec Mode 0:** `Base Mode`
+>   
+>   $$\text{New PC} = (\text{stvec} \ \& \ \text{0xFFFFFFFC})$$
+>- **stvec Mode 1:** `Vectored Interrupt Mode`
+>  
+>$$\text{New PC} = (\text{stvec} \ \& \ \text{0xFFFFFFFC}) + (\text{SCAUSE.Exception Code} \times 4)$$
+
+그러면 `PC`에 따른 `OS trap handler`가 실행되고, `OS`는 역할을 다한 뒤 `sret` 명령어를 실행합니다. 이때 하드웨어는 `SEPC` 값을 `PC`로 복구함과 동시에, 저장해뒀던 이전 상태를 확인하여 `Privilege`를 다시 `U-Mode`로 변경해줍니다
+
+{: .prompt-info}
+>이 과정에서 함수는 반드시 4 byte로 정렬(Alignment) 되어야 합니다(aligned(4)). 이는 `stvec`가 하위 2비트를 `Mode Flag`로 사용하기 때문입니다.
 
 ![datapath_with_controls_to_handle_exceptions](/assets/post/2026-01-17-Hello,-RISC-V!/datapath_with_controls_to_handle_exceptions.png)
 
-### Parallelism
-#### ILP(명령어 수준 병렬성)
+`Exception`을 고려한 `pipelined datapath`은 위와 같습니다. 사실 기능적으로는 `Load-Use`와 거의 동일합니다.
 
+{: .prompt-info}
+> 기능적으로 동일함에도 `MUX`에 제어선을 추가로 연결하지 않은 이유는 제어 신호의 bit width만큼 `MUX`를 확장하는 것보다 `OR Gate`를 추가하는 것이 비용적인 측면에서 훨씬 저렴하기 때문입니다.
+
+### Parallelism
+
+파이프라이닝은 명령어들 사이에 병렬성을 이용하며 이를 `ILP(Instruction-Level Parallelism)`라고 합니다.
+
+`ILP` 양을 증가시키는 방법은 다음과 같습니다.
+
+1. 파이프라인의 깊이를 중가시키기
+2. Multiple Issue
+
+`Multiple Issue`는`Static Multiple Issue`와 `Dynamic Multiple Issue`로 구분되며 아래 두가지 기본적인 문제를 해결해야 합니다.
+
+1. **`Issue Slot`:** 프로세서의 적정  `IPC`와 어떤 명령어들을 내보낼 것인가
+2. **`Data/Control Hazard`:**  `Hazard`를 어떻게 제어할 것인가
+
+#### Static Multiple Issue - VLIW(Very Long Instruction Word)
+
+`Static Multiple Issue` 프로세서의 핵심은 하드웨어가 하던 명령어 종속성 판단을 컴파일러가 대신 처리하는 것입니다. 컴파일러는 실행 시점에 충돌이 없는 명령어들을 미리 골라 하나의 묶음으로 만드는데, 이를 `Issue Packet`이라고 부릅니다.
+
+VLIW(Very Long Instruction Word)는 이러한 방식을 극대화한 구조입니다. 하드웨어에서 복잡한 스케줄링 회로를 제거해 전력 효율과 칩 면적을 최적화할 수 있다는 강력한 장점이 있습니다.
+
+하지만 이론적인 최대 성능을 내기 위해서는 컴파일러가 빈 `Issue slot` 없이 패킷을 꽉 채워야 하므로, 실질 IPC(클럭당 명령어 처리 수)가 전적으로 컴파일러의 역량에 의존하게 됩니다. `VLIW`구조는 컴파일러가 올바르게 스케줄링 하지 않으면 슬롯에 `nop`이 채워지며 낭비를 야기합니다.  이러한 구조적 경직성과 하드웨어 세대 간의 호환성 문제로 인해, VLIW는 범용 컴퓨터보다는 특정 계산 특화된 프로세서에 주로 사용됩니다.
+
+#### Dynamic Multiple Issue - Superscalar
+
+`Superscalar`는 `Issue Packed`하지 않고 명령어를 `in-order`하게 내보내며, 컴파일러의 스케줄 여부와 관계 없이 하드웨어에 의해 올바르게 실행되도록 보장받습니다. 이러한 특징으로 인해 `VLIW`와 다르게 다른 프로세서에서 실행할 때 재컴파일이 필요 없다는 장점이 있습니다.
+
+많은 superscalar 프로세서는 Multiple Issue를 결정하는 기본 틀을 확장하여 Dynamic Pipeline scheduling을 구성합니다. Dynamic Pipeline scheduling은 매 클럭 사이클마다 `Hazard`로 인한 지연을 최소화할 수 있는 명령어들을 실시간으로 선택하며, 그 과정에서 지연을 피하기 위해 명령어들을 재정렬하기도 합니다.
+
+![Multieple clock cycle pipeline diagrams](/assets/post/2026-01-17-Hello,-RISC-V!/dynamic_scheduling_pipeline_units.png)
+이러한 프로세서의 파이프라인은 `Instruction Fetch and Decode Unit`, `Multiple Functional Units`, 그리고 `Commit Unit` 세 가지 주요 부분으로 구성됩니다.
+
+해독된 명령어는 Reservation Station 버퍼에 저장되며, 이때 데이터는 Opcode, Operand의 값(V field) 또는 태그(Q field), 그리고 목적지 정보(rd) 등으로 구성됩니다.
+
+Functional Unit에서 비순차적으로 계산이 완료되면, 결과값은 ROB(Reorder Buffer)에 임시 저장됩니다. 이후 ROB는 정적 스케줄링의 Forwarding과 유사하게, 해당 결과를 기다리는 다른 명령어들에 데이터를 즉시 제공함과 동시에 최종적으로 결과를 순차적으로 Commit합니다.
 
 ## Memory Hierarchy
 
