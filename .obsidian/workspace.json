@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "8f4a9b8de45e823a",
+        "id": "78400ab0facc7998",
         "type": "tabs",
         "children": [
           {
-            "id": "5d00a491f35a3b2e",
+            "id": "78f64616e5629a05",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_posts/2025-12-14-Dive-Deep-into-System-Programming.md",
+                "file": "_posts/2026-01-17-Hello, RISC-V!.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2025-12-14-Dive-Deep-into-System-Programming"
+              "title": "2026-01-17-Hello, RISC-V!"
             }
           }
         ]
@@ -183,34 +183,35 @@
       "bases:새 베이스 생성하기": false
     }
   },
-  "active": "5d00a491f35a3b2e",
+  "active": "78f64616e5629a05",
   "lastOpenFiles": [
-    "_posts/2026-01-17-Hello, RISC-V!.md",
+    "_site/assets/js/2026-01-17-Hello,-RISC-V!/tiling_matmul.js",
+    "assets/js/2026-01-17-Hello,-RISC-V!/tiling_matmul.js",
+    "_site/assets/js/2026-01-17-Hello,-RISC-V!/tiling_matmul_visualization.js",
+    "assets/js/2026-01-17-Hello,-RISC-V!/tiling_matmul_visualization.js",
+    "_site/assets/js/2026-01-17-Hello,-RISC-V!/naive_matmul.js",
+    "assets/js/2026-01-17-Hello,-RISC-V!/naive_matmul.js",
+    "_site/assets/js/2026-01-17-Hello,-RISC-V!/GEMMTilingVisualizer.js",
+    "_site/assets/js/2026-01-17-Hello,-RISC-V!",
+    "assets/js/2026-01-17-Hello,-RISC-V!/GEMMTilingVisualizer.js",
+    "assets/js/2026-01-17-Hello,-RISC-V!",
     "_posts/2025-12-14-Dive-Deep-into-System-Programming.md",
+    "_posts/2026-01-17-Hello, RISC-V!.md",
+    "_posts/2025-12-17-DIRTYBULK.md",
+    "assets/post/2026-01-17-Hello,-RISC-V!/Unconfirmed 463080.crdownload",
+    "_site/assets/post/2026-01-17-Hello,-RISC-V!/4-way_set_associative.png",
+    "assets/post/2026-01-17-Hello,-RISC-V!/4-way_set_associative.png",
+    "_site/assets/post/2026-01-17-Hello,-RISC-V!/miss_rate_vs_block_size.png",
+    "assets/post/2026-01-17-Hello,-RISC-V!/miss_rate_vs_block_size.png",
+    "_site/assets/post/2026-01-17-Hello,-RISC-V!/direct_mapped.png",
+    "assets/post/2026-01-17-Hello,-RISC-V!/direct_mapped.png",
+    "_site/assets/post/2025-12-17-DIRTYBULK/direct_mapped.png",
+    "assets/post/2025-12-17-DIRTYBULK/direct_mapped.png",
     "_tabs/about.md",
     "_site/assets/post/2026-01-17-Hello,-RISC-V!/dynamic_scheduling_pipeline_units.png",
     "assets/post/2026-01-17-Hello,-RISC-V!/dynamic_scheduling_pipeline_units.png",
-    "assets/profile_avatar.jpg",
     "assets/post/2026-01-17-Hello,-RISC-V!/dynamic_scheduling_pipeline_units.md",
     "_site/assets/post/2026-01-17-Hello,-RISC-V!/dynamic_scheduling_pipeline_units.md",
-    "_site/assets/post/2026-01-17-Hello,-RISC-V!/dynamic_scheduling_pipeline_units",
-    "assets/post/2026-01-17-Hello,-RISC-V!/dynamic_scheduling_pipeline_units",
-    "_site/assets/post/2026-01-17-Hello,-RISC-V!/dynamicpipelinescheduling-1200x795.png",
-    "assets/post/2026-01-17-Hello,-RISC-V!/dynamicpipelinescheduling-1200x795.png",
-    "assets/post/2026-01-17-Hello,-RISC-V!/Unconfirmed 236329.crdownload",
-    "_site/assets/post/2026-01-17-Hello,-RISC-V!/Unconfirmed 118504.crdownload",
-    "assets/post/2026-01-17-Hello,-RISC-V!/Unconfirmed 118504.crdownload",
-    "_site/assets/post/2026-01-17-Hello,-RISC-V!/Unconfirmed 122525.crdownload",
-    "assets/post/2026-01-17-Hello,-RISC-V!/Unconfirmed 122525.crdownload",
-    "_site/assets/album/book/programming_massively__parallel_processors/1.png",
-    "assets/album/book/programming_massively__parallel_processors/1.png",
-    "_site/assets/album/book/programming_massively__parallel_processors/Screenshot from 2026-02-12 21-45-57.png",
-    "assets/album/book/programming_massively__parallel_processors/Screenshot from 2026-02-12 21-45-57.png",
-    "_site/assets/album/2025_CJ/KakaoTalk_20260209_112934741_03.jpg",
-    "assets/post/2026-01-17-Hello,-RISC-V!/Unconfirmed 706015.crdownload",
-    "_posts/2025-12-17-DIRTYBULK.md",
-    "_site/posts/Hello,-RISC-V!/index.html",
-    "_site/posts/Hello,-RISC-V!",
     "_tabs/ALBUM.md",
     "_posts/index.md",
     "datapath_with_controls_to_handle_exceptions.md",
