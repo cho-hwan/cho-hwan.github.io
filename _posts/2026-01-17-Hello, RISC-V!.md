@@ -389,9 +389,23 @@ void dgemm(int n, double* A, double* B, double* C)
 
 <script src="/assets/js/2026-01-17-Hello,-RISC-V!/tiling_matmul.js"></script>
 
+B 블록과 C블록에서 Cach Hit의 차이가 확연히 보이죠? 이러한 Blocing(same asTiling)기법을 사용하면 지역성을 높여 컴퓨팅 성능을 향상시킬 수 있습니다.
+
 위 코드를 gcc Compiler를 통해 최적화 옵션을 적용하여 컴파일하면 Inline이 적용되며 do_block함수의 오버헤드가 제거됩니다. 그리고 Blocing을 통해 메모리 워드 수도$2N^3/BLOCKSIZE + N^2$로 감소하는 효과를 보여줍니다. 
 
 A는 공간적 지역성에서 이점을 취하고 B는 시간적 지역성에서 이점을 취하므로, Blocking은 공간과 시간 지역성을 모두 이용하는 최적화 방식입니다. PC와 Matrix Size에 따라 달라지긴 하지만 Blociking시 2배에서 10배 이상까지의 성능 개선을 시킬 수 있다고 합니다.
 
 {: .prompt-info}
 >블로킹의 목적은 캐시 실패를 줄이는 것이지만 레지스터 할당을 돕는데 사용할 수도 있습니다. 블록이 레지스터에 들어갈 수 있을 만큼 BlockSize를 작게 하면 프로그램의 `Load/Store` 횟수를 줄일 수 있어 성능 향상을 만들어낼 수 있습니다. 
+
+
+### System Virtual Machinie
+
+virtual machine은 개발된지는 꽤나 오래됐습니다(1960년도). 1990년대만 하더라도 일반 PC시장에서는 거의 사용되지 않았지만 현대에 들어서며 프로세서 속도의 획기적인 발전으로 VM이 오버헤드를 더 감당할 수 있게 되고, 격리와 보안에 대한 중요도가 증가하며 인기를 얻고 있습니다.
+
+![Direct Mapped](/assets/post/2026-01-17-Hello,-RISC-V!/virtual_machines.webp)
+
+VM은 사실 꽤나 넓은 영역을 지니고있습니다.Java VM같이 표준 소프트웨어 인터페이스를 제공하는 모든 에뮬레이션 또한  VM으로 취급되는데요, 블로그에서 다루는 VM은 ISA수준에서 완전한 시스템 계층 환경을 제공하는 System Virtual Machine이며, IBM VM/730, VirtualBox, Xen, Docker들이 그 예입니다.
+
+System VM은 사용자들에게 전체 컴퓨터를 혼자 쓰고 있다는 환상을 제공합니다. VM을 제공하는 소프트웨어를 VMM(Virtual Machine Monitor) 혹은 Hypervisor라고 부르는데 본 포스팅에서는 VMM이라고 부르겠습니다. VMM은 Virtual Resource를 어떻게 Physical Resource로 사상할 것인지를 결정합니다. 이는 컴퓨팅 자원을 어떻게 분배할 것인지를 의미하죠. 여기서 Physical Resource라고 하면 time-shared 혹은 partitioned로 공유되며 소프트웨어로 에뮬레이션 되기도 합니다.
+
