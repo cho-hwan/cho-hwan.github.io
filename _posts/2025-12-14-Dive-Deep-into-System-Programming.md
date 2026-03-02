@@ -203,7 +203,7 @@ $$\text{소수부} = 1 \times 2^{-1} (0.5) + 1 \times 2^{-2} (0.25) + \dots (\te
 
 이를 혁신적으로 해결한 것이 BF16(Brain Floating Point)입니다. BF16은 FP32와 동일한 8비트 지수부를 가집니다. 즉, 가수부를 7비트로 줄이는 대신, 표현 범위를 FP32 수준으로 유지하는 전략을 취한거죠. 덕분에 수치적 안정성이 극대화되어 복잡한 스케일링 없이도 LLM 학습의 표준 포맷으로 자리 잡았다고 합니다.
 
-## 2. FP8 (Floating Point 8-bit)
+**2. FP8 (Floating Point 8-bit)**
 
 NVIDIA Hopper(H100) 아키텍처부터 본격 도입된 FP8은 8비트라는 극도로 제한된 비트를 목적에 따라 두 가지 세부 포맷으로 유연하게 운용합니다.
 
@@ -211,13 +211,13 @@ NVIDIA Hopper(H100) 아키텍처부터 본격 도입된 FP8은 8비트라는 극
     
 - **E4M3 (Precision Priority):** 가수부에 3비트를 할당하여 상대적으로 높은 정밀도를 제공합니다. 정밀도가 결과에 큰 영향을 미치는 Weights와 Forward Activations 표현에 최적화되어 있습니다. 다만, 최대값이 448로 제한적이므로 정교한 Scaling Factor 관리가 동반됩니다.
 
-## 3. MXFP4 (Microscaling Formats)와 Block Scaling
+**3. MXFP4 (Microscaling Formats)와 Block Scaling**
 
 NVIDIA Blackwell 아키텍처에서 제시하는 MXFP4는 LLM 추론의 고질적인 병목인 Memory Wall(메모리 대역폭 한계)을 극복하기 위한 차세대 규격입니다. 4비트(E2M1 등) 단독으로는 정보 손실이 치명적이기 때문에, 하드웨어 수준의 Block Scaling 기술을 접목했습니다
 
 이는 32개의 요소를 하나의 블록으로 묶고, 이들이 공통의 8비트 Scale Factor(Shared Exponent)를 공유하는 방식입니다. Blackwell의 2세대 트랜스포머 엔진은 이 블록 데이터를 압축 해제 없이 하드웨어에서 직접 연산함으로써, FP16 대비 이론상 최대 20배 이상의 Throughput을 처리 가능하다고 하네요.
 
-## 4. Mixed Precision Strategy (혼합 정밀도 전략)
+**4. Mixed Precision Strategy (혼합 정밀도 전략)**
 
 현대 AI 최적화에서는 각 포맷을 수치적 특성에 맞게 적재적소에 배치하려고 합니다.
 
