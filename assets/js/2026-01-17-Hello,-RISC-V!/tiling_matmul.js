@@ -1,5 +1,5 @@
 /**
- * Tiling DGEMM Visualizer (Cache Blocking)
+ * Tiling DGEMM Visualizer (Fixed: Register Reuse & Correct Tiling)
  */
 (function() {
     const TARGET_CONTAINER_ID = "tiling_matmul_visualization";
@@ -10,12 +10,6 @@
             this.container = document.getElementById(containerId);
             if (!this.container) return;
             
-            // 레이아웃 강제 교정
-            this.container.style.clear = "both";
-            this.container.style.display = "block";
-            this.container.style.overflow = "hidden";
-            this.container.style.width = "100%";
-
             this.N = 6;
             this.BLOCKSIZE = 3;
             this.isAnimating = false;
@@ -32,8 +26,8 @@
         init() {
             const style = document.createElement('style');
             style.innerHTML = `
-                #${ID_PREFIX}_wrapper { font-family: -apple-system, sans-serif; background: #1a1a1a; padding: 25px; border-radius: 12px; color: #e0e0e0; margin: 20px 0; }
-                .header { text-align: center; margin-bottom: 20px; }
+                #${ID_PREFIX}_wrapper { font-family: 'Consolas', monospace; background: #1a1a1a; padding: 25px; border-radius: 12px; color: #e0e0e0; margin: 20px 0; }
+                .header { text-align: center; margin-bottom: 20px; font-family: sans-serif; }
                 .title { font-size: 1.2rem; font-weight: 600; color: #4CAF50; }
                 .controls { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
                 .gemm-btn { padding: 8px 16px; border: none; border-radius: 6px; background: #4CAF50; color: white; cursor: pointer; transition: 0.3s; font-weight: bold; }
@@ -48,19 +42,17 @@
                 .age-light { background: #444 !important; }
                 .age-white { background: #2a2a2a !important; }
                 .active-cell { background: #4CAF50 !important; outline: 1px solid #fff; z-index: 10; }
-                .status-panel { background: #2a2a2a; padding: 15px; border-radius: 8px; margin-top: 20px; font-size: 0.8rem; font-family: monospace; }
-                .code-line { margin: 2px 0; color: #888; white-space: pre; }
-                .code-active { color: #4CAF50; font-weight: bold; background: #1e3a1e; padding: 0 4px; border-radius: 2px; }
+                .status-panel { background: #2a2a2a; padding: 15px; border-radius: 8px; margin-top: 20px; font-size: 0.85rem; line-height: 1.4; }
+                .code-line { margin: 2px 0; color: #777; white-space: pre; }
+                .code-active { color: #f1c40f; font-weight: bold; background: #34495e; padding: 0 4px; border-radius: 2px; }
+                .highlight-fma { color: #4CAF50; font-weight: bold; }
             `;
             document.head.appendChild(style);
 
             this.container.innerHTML = `
                 <div id="${ID_PREFIX}_wrapper">
                     <div class="header">
-                        <div class="title">Tiled DGEMM Simulation (N=6, BlockSize=3)</div>
-                        <div style="font-size:0.85rem; color:#888; margin-top:5px;">
-                            Exploiting spatial and temporal locality through cache blocking.
-                        </div>
+                        <div class="title">Tiled DGEMM with Register Reuse</div>
                     </div>
                     <div class="controls">
                         <button class="gemm-btn" id="${ID_PREFIX}_start">Start Simulation</button>
@@ -72,13 +64,15 @@
                         <div class="matrix-box" id="${ID_PREFIX}_B_box"></div>
                     </div>
                     <div class="status-panel">
-                        <div id="${ID_PREFIX}_line_dgemm" class="code-line">void dgemm(int n, ...) {</div>
-                        <div id="${ID_PREFIX}_line_sj" class="code-line">  for (int sj = 0; sj < n; sj += 3)</div>
-                        <div id="${ID_PREFIX}_line_si" class="code-line">    for (int si = 0; si < n; si += 3)</div>
-                        <div id="${ID_PREFIX}_line_sk" class="code-line">      for (int sk = 0; sk < n; sk += 3)</div>
-                        <div id="${ID_PREFIX}_line_do_block" class="code-line">        do_block(n, si, sj, sk, A, B, C);</div>
-                        <div id="${ID_PREFIX}_line_cij" class="code-line">          // inside do_block: cij = C[i+j*n]</div>
-                        <div id="${ID_PREFIX}_line_acc" class="code-line">          // cij += A[i+k*n] * B[k+j*n]</div>
+                        <div id="${ID_PREFIX}_line_outer" class="code-line">// Tiling loops (Cache Blocking)</div>
+                        <div id="${ID_PREFIX}_line_loops" class="code-line">for (sj, si, sk) { </div>
+                        <div id="${ID_PREFIX}_line_i" class="code-line">  for (int i = si; i < si+BS; ++i)</div>
+                        <div id="${ID_PREFIX}_line_j" class="code-line">    for (int j = sj; j < sj+BS; ++j) {</div>
+                        <div id="${ID_PREFIX}_line_load" class="code-line">      double <span class="highlight-fma">cij</span> = C[i + j*n]; // Load into Register</div>
+                        <div id="${ID_PREFIX}_line_k" class="code-line">      for (int k = sk; k < sk+BS; ++k)</div>
+                        <div id="${ID_PREFIX}_line_fma" class="code-line">        <span class="highlight-fma">cij</span> += A[i + k*n] * B[k + j*n]; // FMA</div>
+                        <div id="${ID_PREFIX}_line_store" class="code-line">      C[i + j*n] = <span class="highlight-fma">cij</span>; // Store back to Memory</div>
+                        <div id="${ID_PREFIX}_line_end" class="code-line">    } }</div>
                         <div id="${ID_PREFIX}_info" style="margin-top:10px; font-weight:bold; color:#4CAF50;">Status: Ready</div>
                     </div>
                 </div>
@@ -117,7 +111,7 @@
                         const lastAccess = this.accessHistory[m][r][c];
                         cell.classList.remove('age-dark', 'age-light', 'age-white', 'active-cell');
                         if (lastAccess === -1) cell.classList.add('age-white');
-                        else if (this.globalClock - lastAccess < 15) cell.classList.add('age-dark');
+                        else if (this.globalClock - lastAccess < 12) cell.classList.add('age-dark');
                         else cell.classList.add('age-light');
                     });
                 }
@@ -130,57 +124,70 @@
             this.startBtn.disabled = true;
             this.abortController = new AbortController();
             const { signal } = this.abortController;
+
             try {
                 for (let sj = 0; sj < this.N; sj += this.BLOCKSIZE) {
-                    this.highlightLine('line_sj');
                     for (let si = 0; si < this.N; si += this.BLOCKSIZE) {
-                        this.highlightLine('line_si');
                         for (let sk = 0; sk < this.N; sk += this.BLOCKSIZE) {
                             if (signal.aborted) return;
-                            this.highlightLine('line_sk');
-                            this.highlightLine('line_do_block');
+                            
+                            this.highlightLine('line_loops');
+
                             for (let i = si; i < si + this.BLOCKSIZE; i++) {
+                                this.highlightLine('line_i');
                                 for (let j = sj; j < sj + this.BLOCKSIZE; j++) {
+                                    if (signal.aborted) return;
+                                    
+                                    // 1. LOAD: cij = C[i+j*n]
+                                    this.highlightLine('line_load');
                                     this.globalClock++;
                                     this.accessHistory.C[i][j] = this.globalClock;
-                                    this.highlightLine('line_cij');
                                     this.updateShading();
                                     document.getElementById(`${ID_PREFIX}_C_${i}_${j}`).classList.add('active-cell');
-                                    await this.sleep(100, signal);
+                                    await this.sleep(150, signal);
+
+                                    // 2. FMA: cij += A*B
+                                    this.highlightLine('line_k');
                                     for (let k = sk; k < sk + this.BLOCKSIZE; k++) {
                                         if (signal.aborted) return;
+                                        this.highlightLine('line_fma');
                                         this.globalClock++;
                                         this.accessHistory.A[i][k] = this.globalClock;
                                         this.accessHistory.B[k][j] = this.globalClock;
-                                        this.highlightLine('line_acc');
                                         this.updateShading();
                                         document.getElementById(`${ID_PREFIX}_A_${i}_${k}`).classList.add('active-cell');
                                         document.getElementById(`${ID_PREFIX}_B_${k}_${j}`).classList.add('active-cell');
-                                        await this.sleep(40, signal);
+                                        await this.sleep(60, signal);
                                     }
+
+                                    // 3. STORE: C[i+j*n] = cij
+                                    this.highlightLine('line_store');
                                     this.globalClock++;
                                     this.accessHistory.C[i][j] = this.globalClock;
                                     this.updateShading();
                                     document.getElementById(`${ID_PREFIX}_C_${i}_${j}`).classList.add('active-cell');
-                                    await this.sleep(50, signal);
+                                    await this.sleep(150, signal);
                                 }
                             }
                         }
                     }
                 }
-                document.getElementById(`${ID_PREFIX}_info`).innerText = "Tiling Simulation Complete";
+                document.getElementById(`${ID_PREFIX}_info`).innerText = "Tiling & Register Reuse Complete";
                 this.highlightLine(null);
-            } catch (e) { } 
-            finally {
-                this.isAnimating = false;
-                this.startBtn.disabled = true;
-            }
+            } catch (e) { if (e.message !== "aborted") console.error(e); } 
+            finally { this.isAnimating = false; this.startBtn.disabled = true; }
         }
 
         highlightLine(idSuffix) {
-            const lines = ['line_sj', 'line_si', 'line_sk', 'line_do_block', 'line_cij', 'line_acc'];
-            lines.forEach(l => document.getElementById(`${ID_PREFIX}_${l}`).classList.remove('code-active'));
-            if(idSuffix) document.getElementById(`${ID_PREFIX}_${idSuffix}`).classList.add('code-active');
+            const lines = ['line_loops', 'line_i', 'line_load', 'line_k', 'line_fma', 'line_store'];
+            lines.forEach(l => {
+                const el = document.getElementById(`${ID_PREFIX}_${l}`);
+                if (el) el.classList.remove('code-active');
+            });
+            if(idSuffix) {
+                const activeEl = document.getElementById(`${ID_PREFIX}_${idSuffix}`);
+                if (activeEl) activeEl.classList.add('code-active');
+            }
         }
 
         reset() {
