@@ -199,10 +199,10 @@
   },
   "active": "78f64616e5629a05",
   "lastOpenFiles": [
-    "_posts/2025-09-22-AMBA AXI Interface Protocol.md",
-    "_posts/2025-12-17-DIRTYBULK.md",
-    "_posts/2026-01-17-Hello, RISC-V!.md",
     "_posts/2025-12-14-Dive-Deep-into-System-Programming.md",
+    "_posts/2025-09-22-AMBA AXI Interface Protocol.md",
+    "_posts/2026-01-17-Hello, RISC-V!.md",
+    "_posts/2025-12-17-DIRTYBULK.md",
     "_site/assets/post/2025-09-22-AMBA-AXI-Interface-Protocol/synchronized1.png",
     "_site/assets/post/2025-09-22-AMBA-AXI-Interface-Protocol/starvation_fairness.png",
     "_site/assets/post/2025-09-22-AMBA-AXI-Interface-Protocol/starvation0.png",

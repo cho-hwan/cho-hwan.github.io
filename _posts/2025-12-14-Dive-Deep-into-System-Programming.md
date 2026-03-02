@@ -191,46 +191,41 @@ $$\text{소수부} = 1 \times 2^{-1} (0.5) + 1 \times 2^{-2} (0.25) + \dots (\te
 
 #### Floating points in deep learning
 
-컴퓨팅 리소스 최적화의 본질은 "모든 연산이 Single Precision의 정밀함을 필요로 하지는 않는다" 라는 사실에서 시작합니다. 불필요한 정밀도(precision)는 메모리 대역폭을 낭비하고, ALU의 Throughput을 저하시키는 주원인이 됩니다.
+컴퓨팅 리소스 최적화의 본질은 "모든 연산이 Single Precision의 정밀함을 필요로 하지는 않는다" 에서 시작합니다. 불필요한 정밀도(precision)는 아키텍처의 에너지 효율성과 메모리 계층 구조의 한계를 극복하기 위한 전략입니다.
 
-따라서 현대 AI 아키텍처는 데이터의 성격에 맞춰 Format의 크기를 줄이는 전략을 취하고 있습니다. 현재 업계에서 가장 주목받는 포맷들을 중심으로 그 최적화 전략을 살펴보겠습니다.
+따라서 현대 AI 아키텍처는 데이터의 성격에 맞춰 Format의 크기를 줄이는 전략을 취하고 있습니다. 좀 대중적인 포맷들을 중심으로 그 최적화 전략을 살펴보겠습니다.
 
-**1. FP16 (Brain Floating Point)**
+#### AI 컴퓨팅 정밀도 및 최적화 전략
 
-과거에는 정밀도를 위해 FP32를 쓰거나, 속도를 위해 FP16을 썼습니다. 하지만 FP16은 표현할 수 있는 수의 범위(Dynamic Range)가 좁아, 학습 중 오버플로우가 빈번하게 발생했습니다.
+**1. FP16 (Half Precision) vs BF16 (Brain Floating Point)**
 
-이를 해결한 것이 **BF16**입니다. BF16은 FP32와 동일한 8비트 지수부(Exponent)를 가집니다. 즉, "정밀도(가수부)를 조금 포기하는 대신, 표현 범위(지수부)를 FP32 수준으로 유지" 하는 전략입니다. 덕분에 복잡한 Loss Scaling 기법 없이도 안정적인 학습이 가능해져, 현재 구글 TPU와 엔비디아 GPU를 포함한 대부분의 AI 가속기에서 학습용 표준 포맷으로 자리 잡았습니다.
+과거에는 정밀도를 위해 FP32를 쓰거나, 속도를 위해 FP16을 썼습니다. 하지만 FP16은 지수부가 5비트로 짧아 표현 범위가 좁았고, 이로 인해 학습 중 Overflow/Underflow가 빈번하게 발생하여 별도의 Loss Scaling 기법이 필수적이였다고 합니다.
 
-**2. FP8 (Floating Point 8-bit)**
+이를 혁신적으로 해결한 것이 BF16(Brain Floating Point)입니다. BF16은 FP32와 동일한 8비트 지수부를 가집니다. 즉, 가수부를 7비트로 줄이는 대신, 표현 범위를 FP32 수준으로 유지하는 전략을 취한거죠. 덕분에 수치적 안정성이 극대화되어 복잡한 스케일링 없이도 LLM 학습의 표준 포맷으로 자리 잡았다고 합니다.
 
-NVIDIA H100(Hopper) 아키텍처부터 도입된 FP8은 8비트라는 극한의 공간을 목적에 따라 두 가지로 쪼개어 사용합니다.
+## 2. FP8 (Floating Point 8-bit)
 
-- **E5M2:** 지수(Range)에 5비트를 할당하여, 값이 널뛰기 쉬운 Gradients 연산 최적화
+NVIDIA Hopper(H100) 아키텍처부터 본격 도입된 FP8은 8비트라는 극도로 제한된 비트를 목적에 따라 두 가지 세부 포맷으로 유연하게 운용합니다.
+
+- **E5M2 (Range Priority):** 지수에 5비트를 할당하여 넓은 범위를 확보합니다. 값의 변동폭이 커서 정밀도보다 범위가 중요한 Gradients(기울기) 및 역전파 연산에 주로 사용된다고 합니다.
     
-- **E4M3:** 가수부(Precision)에 비트를 더 할당하여, 정밀도가 중요한 Weights 와 Activations 표현에 적합
+- **E4M3 (Precision Priority):** 가수부에 3비트를 할당하여 상대적으로 높은 정밀도를 제공합니다. 정밀도가 결과에 큰 영향을 미치는 Weights와 Forward Activations 표현에 최적화되어 있습니다. 다만, 최대값이 448로 제한적이므로 정교한 Scaling Factor 관리가 동반됩니다.
 
-이러한 유연성은 모델의 정확도를 유지하면서도 FP32 대비 이론상 4배의 처리량을 확보하게 해줍니다.
+## 3. MXFP4 (Microscaling Formats)와 Block Scaling
 
-**3. cFP4와 Block Scaling**
+NVIDIA Blackwell 아키텍처에서 제시하는 MXFP4는 LLM 추론의 고질적인 병목인 Memory Wall(메모리 대역폭 한계)을 극복하기 위한 차세대 규격입니다. 4비트(E2M1 등) 단독으로는 정보 손실이 치명적이기 때문에, 하드웨어 수준의 Block Scaling 기술을 접목했습니다
 
-Blackwell 아키텍처가 제시하는 MXFP4는 LLM 추론의 핵심인 Memory Wall 을 해결하기 위한 방식입니다. 단순히 비트 수만 줄이면 정보 손실이 너무 크기에, Block Scaling 기술을 접목했습니다.
+이는 32개의 요소를 하나의 블록으로 묶고, 이들이 공통의 8비트 Scale Factor(Shared Exponent)를 공유하는 방식입니다. Blackwell의 2세대 트랜스포머 엔진은 이 블록 데이터를 압축 해제 없이 하드웨어에서 직접 연산함으로써, FP16 대비 이론상 최대 20배 이상의 Throughput을 처리 가능하다고 하네요.
 
-이는 수십 개의 숫자를 하나의 블록으로 묶고, 이들이 Shared Exponent 를 따로 관리합니다. 덕분에 4비트라는 작은 공간으로도 거대 언어 모델의 가중치를 효과적으로 압축하여 전송하고 연산할 수 있습니다.
+## 4. Mixed Precision Strategy (혼합 정밀도 전략)
 
-**4. Mixed Precision Strategy**
+현대 AI 최적화에서는 각 포맷을 수치적 특성에 맞게 적재적소에 배치하려고 합니다.
 
-가장 중요한 점은 이 포맷들을 적재적소에 섞어 쓰는 것입니다. 무조건 비트 수를 줄이는 것이 능사는 아닙니다.
+- **Weights:** 모델 파라미터는 통계적으로 분포가 안정적이며 양자화에 강건하므로, **FP8**이나 **MXFP4**로 과감하게 다이어트하여 메모리 점유율을 낮춥니다.
 
-- **Weight:** 덩치가 가장 크고 통계적으로 분포가 안정적이므로 **FP4, FP8**로 과감하게 다이어트합니다.
-    
-- **Gradient** 학습의 방향을 결정하고 값의 변화폭이 크므로 **BF16**이나 **FP8(E5M2)** 로 범위를 확보해야 합니다.
-    
-- **Bias & Batch Norm:** 파라미터 수는 적지만 모델 전체의 기준점을 잡는 민감한 요소입니다. 이들은 **FP32**나 **BF16**과 같은 고정밀 포맷을 유지해야 모델이 망가지지 않습니다.
+- **Gradients:** 학습의 방향을 결정하며 매우 작은 값부터 큰 값까지 널뛰기 때문에, **BF16**이나 **FP8(E5M2)** 을 사용하여 수치적 범위를 확보해야 학습이 폭주하지 않습니다.
 
-<br>
-
-<div id="ai-precision-container"></div>
-<script src="/assets/js/visualize_different_types_of_floatingPoints.js"></script>
+- **Bias & Norm Layers:** 파라미터 수는 적지만 모델 전체의 수렴성을 결정하는 결정적인 요소입니다. 또한 **Layer Norm/Batch Norm**은 수만 개의 요소를 합산하는 과정에서 Swamping이 발생하기 쉬우므로, 연산의 정밀도를 보장하기 위해 **FP32** 혹은 **BF16** 포맷을 유지하는 것이 모델 붕괴를 막는 핵심입니다.
 
 
 ## Dynamic Memory Allocation(동적 메모리 할당)

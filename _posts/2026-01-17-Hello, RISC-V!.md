@@ -409,3 +409,4 @@ VM은 사실 꽤나 넓은 영역을 지니고있습니다.Java VM같이 표준 
 
 System VM은 사용자들에게 전체 컴퓨터를 혼자 쓰고 있다는 환상을 제공합니다. VM을 제공하는 소프트웨어를 VMM(Virtual Machine Monitor) 혹은 Hypervisor라고 부르는데 본 포스팅에서는 VMM이라고 부르겠습니다. VMM은 Virtual Resource를 어떻게 Physical Resource로 사상할 것인지를 결정합니다. 이는 컴퓨팅 자원을 어떻게 분배할 것인지를 의미하죠. 여기서 Physical Resource라고 하면 time-shared 혹은 partitioned로 공유되며 소프트웨어로 에뮬레이션 되기도 합니다.
 
+**이어서 작성 예정입니다...**
