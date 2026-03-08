@@ -473,3 +473,32 @@ TLB는 캐시 메커니즘을 따르기에 다양한 세트 연관 방식을 적
 {: .prompt-tip}
 >약간의 TMI를 붙이자면, `Fault`는 하드웨어만으로 극복이 불가해 운영체제에게 제어권을 넘기는 Exception에 해당하므로 `RISC-V`에서는`TLB Miss`라고 명칭해야합니다. 그러한 의미에서 `MIPS`는 `Software managed TLB` 이므로 `TLB Fault`라고 명칭하면 아주 정확한 것이지요. 
 
+그리고 재밌게도 Cache에서 Tag와 Index를 Virtual Address에서 가져오냐, Physical Address에서 가져오냐에 따라 PIPT, VIVT, VIPT(PIVT는 생략)으로 나눌 수 있으며,  구분에 따라  다양한 특성과 문제가 발생합니다.
+
+![PIPT](/assets/post/2026-01-17-Hello,-RISC-V!/PIPT.png)
+
+우선 정석적인 방식 `PIPT(Physically Indexed, Physically Tagged)`입니다. 이 방식은 아무래도 TLB 조회 + Cache Index 조회가 순차적으로(Sequentialy) 수행해야하므로 다른 방식에 비해 상대적으로 느립니다. 그렇지만 이후에 설명할 VIPT 에서 발생하는 aliasing, homonym 문제가 발생하지 않는다는 장점이 있어 속도보다 용량과 정확성이 중요한 하위레벨 캐시에서 많이 사용됩니다. 실제 루나레이크에서는 L0/L1캐시에서 `VIPT`가, L2/L3 캐시에서는 `PIPT`가 사용되었습니다.
+
+{: .prompt-tip}
+>추가적인 구성을 통한 문제 해결은 항상 가능한 일이기에, 위에서 말하는 장점과 단점은 기본형에 국한된 설명임을 알아주세요
+
+![VIPT](/assets/post/2026-01-17-Hello,-RISC-V!/VIPT.png)
+
+경우에 따라 최적화를 위해서는 가상 주소의 일부(k)를 이용해 TLB에서의 Tag조회 + 캐시 인덱스 조회가 동시에((Parallel)) 이루어지는 `VIPT (Virtually Indexed, Physically Tagged)`방식을 사용할 수도 있습니다. 그렇지만  Homonym 문제가 발생할 수 있습니다. 아래에서 이 문제를 한번 다뤄보죠
+
+Homonym 문제는 서로 다른 두 프로세스(Process A, B)가 각자의 가상 주소(Virtual Address) 공간에서 동일한 주소 값을 사용하지만, 실제로는 서로 다른 물리 주소(Physical Address)를 가리킬 때 발생합니다.
+
+"이게 어떻게 말이 되느냐, 애초에 설계를 개떡같이 한거 아니냐"라고 반문할 수 있습니다. 그렇지만 사실 이것이 가상 메모리의 본질입니다. 모든 프로세스는 자신이 시스템 메모리를 독점하고 있다는 착각 속에서 독립된 주소 체계를 가져야 하기 때문입니다. 현대 아키텍처는 가상 메모리가 주는 이 거대한 이점을 포기하지 않았고, 그 반작용으로 나타나는 Homonym 현상을 하드웨어적으로 관리하는 방향을 선택했습니다.
+
+과거에는 Context Switching이 발생할 때마다 캐시나 TLB를  Flush해버리는 방식을 통해 Homonym 문제를 원천 차단했습니다. 하지만 이는 심각한 성능 저하를 야기했기에, 현대 프로세서는 태그(Tag) 필드에 가상 주소뿐만 아니라 "이 데이터가 어느 프로세스의 것인가"를 증명하는 프로세스 고유 식별자(ASID)를 함께 저장합니다.
+
+이러한 식별자 덕분에 이제 CPU는 `Context Switching` 후에도 캐시를 비우지 않고, "VA는 같아도 식별자가 다른 데이터를 정확히 구분해내며 고성능을 유지할 수 있게 되었습니다.
+
+{: .prompt-tip}
+>다루지 않은 Aliasing 이라는 잠재적 위험이 있습니다. 이 현상은 서로 다른 Virtual Address들이 동일한Physical Address를 매핑할 때 발생합니다. 이로 인해 특정 가상 주소에서 수행한 쓰기 작업의 결과가, 다른 가상 주소에는 즉각 반영되지 않는 Inconsistency 문제를 야기합니다. 이는 시스템의 무결성을 파괴하는 심각함 문제입니다.
+>
+>그렇지만 Aliasing은 설계 단계에서 VIPT 제약 조건($k+b \le p$)을 준수하거나 Way(Associativity)를 대폭 늘려 인덱스 비트($k$)가 $p$의 울타리를 넘지 않게 조절하는 방법이 존재해 다루지 않았습니다. 그렇지만 Aliasing를 놓치거나 성능을 위해 인덱스($k$) 비트를 과도하게(over $p$) 늘리는 순간 언제든 발생할 수 있는 잠재적 위협입니다.
+
+
+{: .prompt-tip}
+>X86-64에서는 프로세스 고유 식별자 비트를 `PCID(Process Context Identifiers)`라고 합니다.
