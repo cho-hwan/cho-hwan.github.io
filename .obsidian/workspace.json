@@ -4,39 +4,24 @@
     "type": "split",
     "children": [
       {
-        "id": "78400ab0facc7998",
+        "id": "d7e5fc3c60e2c77b",
         "type": "tabs",
         "children": [
           {
-            "id": "54f291a17bbccdcf",
+            "id": "baec7cd85a4e3f31",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_tabs/categories.md",
+                "file": "_posts/2026-06-25-Probabilistic Robotics.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "categories"
-            }
-          },
-          {
-            "id": "f79503634701f879",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "_tabs/about.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "about"
+              "title": "2026-06-25-Probabilistic Robotics"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -198,39 +183,43 @@
       "bases:새 베이스 생성하기": false
     }
   },
-  "active": "f79503634701f879",
+  "active": "baec7cd85a4e3f31",
   "lastOpenFiles": [
+    "무제.md",
+    "_posts/2026-06-25-Probabilistic Robotics.md",
+    "_site/assets/post/2026-06-25-Probabilistic Robotics/robo.gif",
+    "assets/post/2026-06-25-Probabilistic Robotics/robo.gif",
+    "assets/post/2026-06-25-Probabilistic Robotics/Unconfirmed 599627.crdownload",
+    "assets/post/2026-06-25-Probabilistic Robotics/Unconfirmed 21168.crdownload",
+    "assets/post/2026-06-25-Probabilistic Robotics/Unconfirmed 459577.crdownload",
+    "assets/post/2026-06-25-Probabilistic Robotics/Unconfirmed 222948.crdownload",
+    "_site/assets/post/2026-06-25-Probabilistic Robotics/robo2.jpg",
+    "assets/post/2026-06-25-Probabilistic Robotics/robo2.jpg",
+    "assets/post/2026-06-25-Probabilistic Robotics/Unconfirmed 706958.crdownload",
+    "_posts/2026-01-17-Hello, RISC-V!.md",
+    "_site/assets/post/2026-06-25-Probabilistic Robotics/robo.jpeg",
+    "assets/post/2026-06-25-Probabilistic Robotics/robo.jpeg",
+    "assets/post/2026-06-25-Probabilistic.md",
+    "_site/assets/post/2026-06-25-Probabilistic.md",
+    "_site/posts/Probabilistic-Robotics/index.html",
+    "_site/posts/Probabilistic-Robotics",
+    "_site/categories/robotics/index.html",
+    "_site/categories/robotics",
+    "_site/tags/math/index.html",
     "_posts/2025-12-17-DIRTYBULK.md",
+    "_tabs/categories.md",
     "_posts/2025-09-22-AMBA AXI Interface Protocol.md",
     "_posts/2025-12-14-Dive-Deep-into-System-Programming.md",
-    "_tabs/archives.md",
     "_tabs/ALBUM.md",
-    "_tabs/categories.md",
     "_tabs/about.md",
-    "_posts/2026-01-17-Hello, RISC-V!.md",
-    "_includes/toc.html",
+    "_tabs/archives.md",
     "_site/assets/post/2026-01-17-Hello,-RISC-V!/parallel_hardware_classification_based_on_number_of_command_streams_and_number_of_data_streams.webp",
     "assets/post/2026-01-17-Hello,-RISC-V!/parallel_hardware_classification_based_on_number_of_command_streams_and_number_of_data_streams.webp",
-    "assets/post/2026-01-17-Hello,-RISC-V!/Unconfirmed 407044.crdownload",
     "vendor/bundle/ruby/3.2.0/gems/nokogiri-1.19.0-x86_64-linux-gnu/README.md",
-    "assets/post/2026-01-17-Hello,-RISC-V!/Unconfirmed 734767.crdownload",
     "_site/assets/post/2026-01-17-Hello,-RISC-V!/PIPT.png",
     "assets/post/2026-01-17-Hello,-RISC-V!/PIPT.png",
-    "assets/post/2026-01-17-Hello,-RISC-V!/Unconfirmed 229328.crdownload",
-    "_site/assets/post/2026-01-17-Hello,-RISC-V!/VIPT.png",
-    "_site/assets/post/2026-01-17-Hello,-RISC-V!/PIPT.jpg",
-    "assets/post/2026-01-17-Hello,-RISC-V!/VIPT.png",
-    "assets/post/2026-01-17-Hello,-RISC-V!/Unconfirmed 138289.crdownload",
-    "assets/post/2026-01-17-Hello,-RISC-V!/PIPT.jpg",
-    "assets/post/2026-01-17-Hello,-RISC-V!/Unconfirmed 225958.crdownload",
-    "_site/assets/post/2026-01-17-Hello,-RISC-V!/simple_architecture_virtual_memory.png",
-    "assets/post/2026-01-17-Hello,-RISC-V!/simple_architecture_virtual_memory.png",
-    "assets/post/2026-01-17-Hello,-RISC-V!/Unconfirmed 38345.crdownload",
-    "assets/post/2026-01-17-Hello,-RISC-V!/Unconfirmed 892929.crdownload",
     "Virtual Memory.md",
     "_site/Virtual Memory.md",
-    "_site/assets/post/2025-09-22-AMBA-AXI-Interface-Protocol",
-    "assets/post/2025-09-22-AMBA-AXI-Interface-Protocol",
     "assets/post/2026-01-17-Hello,-RISC-V!/dynamic_scheduling_pipeline_units.md",
     "_site/assets/post/2026-01-17-Hello,-RISC-V!/dynamic_scheduling_pipeline_units.md",
     "_posts/index.md",
@@ -241,9 +230,6 @@
     "assets/post/2026-01-17-Hello,-RISC-V!.md",
     "_site/assets/post/2026-01-17-Hello,-RISC-V!.md",
     "_posts/2024-09-04-deep-dive-into-triton-internals-3.md",
-    "_posts/2024-12-16-transformers-for-recsys-3.md",
-    "_posts/2025-12-31-learn-cutlass-the-hard-way-2.md",
-    "_posts/2017-03-05-geometry-of-regression.md",
-    "_posts/2018-05-16-how-to-zmq-proxy.md"
+    "_posts/2024-12-16-transformers-for-recsys-3.md"
   ]
 }
