@@ -24,22 +24,22 @@ author: ch
 
 ---
 
-조합론적 질문을 연속적인 도구로 풀어내는 과정은 참 재밌는 것 같습니다(게다가 굉.장.히 유용하다!!). 그게 이 포스팅의 작성 이유입니다.
+조합론적 질문을 연속적인 도구로 풀어내는 과정이 꽤나 재밌다. 그 과정을 담았다.
 
 *처음 나오는 용어의 경우 직역을 포함해서 서술합니다. 그러나 용어는 기본적으로 영문을 사용합니다.*
 
 ## Moore Graph와 Hoffman-Singleton 정리
 
-그래프의 지름(diameter) $D$는 그래프의 어떤 노드에서 다른 어떤 노드로든 이동할 수 있음을 보장하기 위해 필요한 최소 이동 거리입니다. 아래와 같이 정리할 수 있습니다.
+그래프의 지름(diameter) $D$는 그래프의 어떤 노드에서 다른 어떤 노드로든 이동할 수 있음을 보장하기 위해 필요한 최소 이동 거리입니다. 아래와 같이 정리할 수 있다.
 
 $$D = \underset{i,j \in V}{max} \ \text{"length of shortest path between } i\  \text{and} j\ \text{"}$$
 
-모든 노드의 차수(degree)가 $d$일 때 그 그래프를 $\text{d-regular}$ 하다고 합니다. 여기서 $degree$란 각 정점에 연결된 간선의 개수를 말합니다. 아래 그래프는 $diameter$가 2이지만, 어떤 노드는 $degree$가 2이고 어떤 노드는 $degree$가 3이므로 $\text{d-regular}$ 가 아닙니다.
+모든 노드의 차수(degree)가 $d$일 때 그 그래프를 $\text{d-regular}$ 하다고 한다. 여기서 $degree$란 각 정점에 연결된 간선의 개수를 말한다. 아래 그래프는 $diameter$가 2이지만, 어떤 노드는 $degree$가 2이고 어떤 노드는 $degree$가 3이므로 $\text{d-regular}$ 가 아니다.
 
 ![a](</assets/post/2026-07-01-Spectral Graph Theory Basic/1_1.png>)
 
 
-지름이 2인 $\text{d-regular}$그래프 중 노드 수가 최대한 많은 것을 다룹니다. 임의의 $\text{d-regular}$그래프를 노드 $i$에서 시작해 트리형태로 층별로 펼쳐 그리면 아래와 같은 형태가 됩니다.
+지름이 2인 $\text{d-regular}$그래프 중 노드 수가 최대한 많은 것을 다룬다. 임의의 $\text{d-regular}$그래프를 노드 $i$에서 시작해 트리형태로 층별로 펼쳐 그리면 아래와 같은 형태가 된다.
 
 ![b](</assets/post/2026-07-01-Spectral Graph Theory Basic/1_2.png>)
 
@@ -102,7 +102,7 @@ $$\lambda = \frac{-1 \pm \sqrt{4d-3}}{2}$$
 
 이다.
 
-고유값들을 알았으니 무엇을 할 수 있을까? **trace를 쓰면 된다!** 그래프에 self-loop가 없으므로 모든 $i$에 대해 $a_{ii} = 0$이고, 따라서 $tr(A) = 0$이다. 이제 두 가지 경우를 나눠 생각한다.
+고유값들을 알았으니 무엇을 할 수 있을까? trace를 쓰면 된다! 그래프에 self-loop가 없으므로 모든 $i$에 대해 $a_{ii} = 0$이고, 따라서 $tr(A) = 0$이다. 이제 두 가지 경우를 나눠 생각한다.
 
 **Case 1. $\sqrt{4d-3}$이 무리수인 경우**
 

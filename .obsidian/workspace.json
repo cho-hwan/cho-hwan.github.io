@@ -41,12 +41,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_posts/2026-07-20-Image-Deploy.md",
+                "file": "_posts/2026-07-01-Spectral Graph Theory Basic.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-07-20-Image-Deploy"
+              "title": "2026-07-01-Spectral Graph Theory Basic"
             }
           }
         ],
@@ -215,6 +215,9 @@
   "active": "aa158377d9cbb8ee",
   "lastOpenFiles": [
     "_posts/2026-07-20-Image-Deploy.md",
+    "_posts/2026-07-20-Image-Deploy1.md",
+    "_site/posts/Image-Deploy1/index.html",
+    "_site/posts/Image-Deploy1",
     "_site/posts/Image-Deploy/index.html",
     "_site/posts/Image-Deploy",
     "_site/assets/post/2026-07-20-Image-Deploy/gpedit-code.txt",
@@ -235,8 +238,6 @@
     "assets/post/2026-07-20-이미지.md",
     "assets/post/2026-07-20-Image-Deploy/gpedit-code.txt",
     "assets/post/2026-07-20-이미지 배포/gpedit-코드.txt",
-    "assets/post/2026-07-20-Image-Deploy",
-    "assets/post/무제",
     "_posts/2026-06-25-Probabilistic Robotics.md",
     "_posts/2026-01-17-Hello, RISC-V!.md",
     "_posts/2025-09-22-AMBA AXI Interface Protocol.md",
@@ -257,7 +258,6 @@
     "_posts/index.md",
     "datapath_with_controls_to_handle_exceptions.md",
     "_site/datapath_with_controls_to_handle_exceptions.md",
-    "assets/post/2026-01-17-Hello,-RISC-V! 1.md",
-    "_site/assets/post/2026-01-17-Hello,-RISC-V! 1.md"
+    "assets/post/2026-01-17-Hello,-RISC-V! 1.md"
   ]
 }
