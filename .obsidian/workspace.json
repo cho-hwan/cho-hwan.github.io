@@ -4,24 +4,53 @@
     "type": "split",
     "children": [
       {
-        "id": "64a787f9559f69d4",
+        "id": "8b36efb7d22e52d6",
         "type": "tabs",
         "children": [
           {
-            "id": "f763d3fe5166895f",
+            "id": "e4d00b655a056871",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_posts/2026-01-17-Hello, RISC-V!.md",
+                "file": "_posts/2026-07-20-Image-Deploy.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-01-17-Hello, RISC-V!"
+              "title": "2026-07-20-Image-Deploy"
+            }
+          },
+          {
+            "id": "b55237947d43a5ff",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "_posts/2026-07-20-Image-Deploy.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2026-07-20-Image-Deploy"
+            }
+          },
+          {
+            "id": "aa158377d9cbb8ee",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "_posts/2026-07-20-Image-Deploy.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2026-07-20-Image-Deploy"
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -183,34 +212,36 @@
       "bases:새 베이스 생성하기": false
     }
   },
-  "active": "f763d3fe5166895f",
+  "active": "aa158377d9cbb8ee",
   "lastOpenFiles": [
+    "_posts/2026-07-20-Image-Deploy.md",
+    "_site/posts/Image-Deploy/index.html",
+    "_site/posts/Image-Deploy",
+    "_site/assets/post/2026-07-20-Image-Deploy/gpedit-code.txt",
+    "_site/assets/post/2026-07-20-Image-Deploy/7.png",
+    "_site/assets/post/2026-07-20-Image-Deploy/6.png",
+    "_site/assets/post/2026-07-20-Image-Deploy/5.png",
+    "_site/assets/post/2026-07-20-Image-Deploy/4.png",
+    "_site/assets/post/2026-07-20-Image-Deploy/3.png",
+    "_site/assets/post/2026-07-20-Image-Deploy/2.png",
+    "_site/assets/post/2026-07-20-Image-Deploy/1.png",
+    "_site/assets/post/2026-07-20-Image-Deploy",
+    "_site/tags/setting/index.html",
+    "_site/tags/setting",
     "_posts/2026-07-01-Spectral Graph Theory Basic.md",
+    "assets/post/2026-07-20-Image-Deploy/7.png",
+    "assets/post/2026-07-20-Image-Deploy/6.png",
+    "assets/post/2026-07-20-Image-Deploy/스크린샷 2026-07-20 151428.png",
+    "assets/post/2026-07-20-이미지.md",
+    "assets/post/2026-07-20-Image-Deploy/gpedit-code.txt",
+    "assets/post/2026-07-20-이미지 배포/gpedit-코드.txt",
+    "assets/post/2026-07-20-Image-Deploy",
+    "assets/post/무제",
     "_posts/2026-06-25-Probabilistic Robotics.md",
+    "_posts/2026-01-17-Hello, RISC-V!.md",
     "_posts/2025-09-22-AMBA AXI Interface Protocol.md",
     "_posts/2025-12-14-Dive-Deep-into-System-Programming.md",
-    "_posts/2026-01-17-Hello, RISC-V!.md",
-    "_site/assets/post/2026-06-25-Probabilistic Robotics/swerling.jpg",
-    "assets/post/2026-06-25-Probabilistic Robotics/swerling.jpg",
-    "assets/post/2026-06-25-Probabilistic Robotics/Unconfirmed 402493.crdownload",
-    "_site/assets/post/2026-06-25-Probabilistic Robotics/swerling.jpeg",
-    "assets/post/2026-06-25-Probabilistic Robotics/swerling.jpeg",
-    "assets/post/2026-06-25-Probabilistic Robotics/Unconfirmed 607672.crdownload",
-    "_site/Pasted image 20260701203913.png",
-    "Pasted image 20260701203913.png",
-    "_site/assets/post/f/2.png",
-    "assets/post/f/2.png",
-    "assets/post/f/Unconfirmed 785802.crdownload",
-    "assets/post/f/1.png",
-    "_site/assets/post/f/1.png",
-    "_site/assets/post/f",
-    "assets/post/f/Unconfirmed 179212.crdownload",
-    "assets/post/f",
-    "_site/posts/5/index.html",
-    "_site/posts/5",
-    "_site/posts/index.html",
     "무제.md",
-    "assets/post/2026-06-25-Probabilistic Robotics/Unconfirmed 599627.crdownload",
     "assets/post/2026-06-25-Probabilistic.md",
     "_site/assets/post/2026-06-25-Probabilistic.md",
     "_posts/2025-12-17-DIRTYBULK.md",
@@ -227,8 +258,6 @@
     "datapath_with_controls_to_handle_exceptions.md",
     "_site/datapath_with_controls_to_handle_exceptions.md",
     "assets/post/2026-01-17-Hello,-RISC-V! 1.md",
-    "_site/assets/post/2026-01-17-Hello,-RISC-V! 1.md",
-    "assets/post/2026-01-17-Hello,-RISC-V!.md",
-    "_site/assets/post/2026-01-17-Hello,-RISC-V!.md"
+    "_site/assets/post/2026-01-17-Hello,-RISC-V! 1.md"
   ]
 }

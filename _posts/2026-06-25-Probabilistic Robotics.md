@@ -324,7 +324,7 @@ $$
 </div>
 
 
- 왼쪽은 젊은시절 Donald Trump를 연상캐 하는 사람은 Rudolf E. Kálmán, 칼만 필터를 제안한 인물이다.  오른쪽은 Peter Swerling, 칼만 필터를 개발한 인물이다.
+ 젊은시절 Donald Trump를 연상캐 하는 왼쪽 인물은 Rudolf E. Kálmán, 칼만 필터를 제안한 인물이다. 오른쪽은 Peter Swerling, 칼만 필터를 개발한 인물이다.
  
 **베이즈 필터 기반 예측과 보정의 분리**
 
