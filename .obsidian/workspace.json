@@ -41,12 +41,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_posts/2026-07-01-Spectral Graph Theory Basic.md",
+                "file": "_posts/2026-07-20-Image-Deploy.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-07-01-Spectral Graph Theory Basic"
+              "title": "2026-07-20-Image-Deploy"
             }
           }
         ],
@@ -214,6 +214,7 @@
   },
   "active": "aa158377d9cbb8ee",
   "lastOpenFiles": [
+    "_posts/2026-07-01-Spectral Graph Theory Basic.md",
     "_posts/2026-07-20-Image-Deploy.md",
     "_posts/2026-07-20-Image-Deploy1.md",
     "_site/posts/Image-Deploy1/index.html",
@@ -231,7 +232,6 @@
     "_site/assets/post/2026-07-20-Image-Deploy",
     "_site/tags/setting/index.html",
     "_site/tags/setting",
-    "_posts/2026-07-01-Spectral Graph Theory Basic.md",
     "assets/post/2026-07-20-Image-Deploy/7.png",
     "assets/post/2026-07-20-Image-Deploy/6.png",
     "assets/post/2026-07-20-Image-Deploy/스크린샷 2026-07-20 151428.png",

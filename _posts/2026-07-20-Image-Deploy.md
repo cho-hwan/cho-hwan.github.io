@@ -1,6 +1,6 @@
 ---
-title: 이미지 배포
-description: IT 인프라팀 이미지 배포 과정
+title: 실습실 이미지 배포
+description: IT 인프라팀 이미지 배포
 date: 2026-07-20
 categories:
   - IT인프라팀
@@ -10,8 +10,7 @@ pin: false
 math:
 author: ch
 ---
-**Master PC D드라이브(하드디스크)에 반드시 이미지가 존재해야합니다. 이를 위해 실습실 맨 앞줄 PC 윈도우 포맷 + 이미지 전송이 Master PC에 한해서 한차례 이루어져야합니다.**
-
+**정독하지 마세요. 우측 목차를 통해 필요한 부분만 찾아서 보세요.**
 
 - **master PC**: 이미지 배포를 해주는 PC
 - **slave PC**: 이미지 배포를 받는 PC
