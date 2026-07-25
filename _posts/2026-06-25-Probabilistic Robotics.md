@@ -267,9 +267,9 @@ $$ bel(x_0) = \mathcal{N}(x_0;\ \mu_0,\ \Sigma_0) $$
 
 칼만 필터는 새로운 알고리즘이 아니라 베이즈 필터의 두 단계에 세 전제를 대입한 결과물이다. 즉 갱신은 여전히 두 단계로 분리되어 있다.
 
-$$ \overline{bel}(x_t) = \int p(x_t \mid x_{t-1}, u_t), bel(x_{t-1}), dx_{t-1} \qquad \text{(예측)} $$
+$$ \overline{bel}(x_t) = \int p(x_t \mid x_{t-1}, u_t) bel(x_{t-1}) dx_{t-1} \qquad \text{(예측)} $$
 
-$$ bel(x_t) = \eta, p(z_t \mid x_t), \overline{bel}(x_t) \qquad \text{(보정)} $$
+$$ bel(x_t) = \eta p(z_t \mid x_t)\overline{bel}(x_t) \qquad \text{(보정)} $$
 
 두 단계의 수학적 성격은 다르다. 예측은 $x_{t-1}$을 적분으로 소거하는 주변화이고, 보정은 두 분포를 곱하는 조건화다. 적분이 곱보다 훨씬 어렵기 때문에, 유도의 무게중심은 예측 단계에 실린다. 예측만 넘어서면 보정은 같은 기술의 짧은 반복이다.
 
@@ -277,7 +277,7 @@ $$ bel(x_t) = \eta, p(z_t \mid x_t), \overline{bel}(x_t) \qquad \text{(보정)} 
 
 전제 1과 3을 예측 식에 대입하면, 가우시안 두 개의 곱을 적분하는 문제가 된다. 지수부를 하나로 합쳐 $L_t$라 하자.
 
-$$ \overline{bel}(x_t) = \eta \int \exp{-L_t}, dx_{t-1} $$
+$$ \overline{bel}(x_t) = \eta \int \{\exp{-L_t}\}dx_{t-1} $$
 
 $$ L_t = \tfrac{1}{2}(x_t - A_t x_{t-1} - B_t u_t)^T R_t^{-1}(x_t - A_t x_{t-1} - B_t u_t) + \tfrac{1}{2}(x_{t-1} - \mu_{t-1})^T \Sigma_{t-1}^{-1}(x_{t-1} - \mu_{t-1}) $$
 
@@ -295,7 +295,7 @@ $$ L_t = L_t(x_{t-1}, x_t) + L_t(x_t) $$
 
 분해가 성립한다면 적분은 다음처럼 붕괴한다.
 
-$$ \overline{bel}(x_t) = \eta \exp{-L_t(x_t)} \int \exp{-L_t(x_{t-1}, x_t)}, dx_{t-1} $$
+$$ \overline{bel}(x_t) = \eta \exp{-L_t(x_t)} \int \exp{-L_t(x_{t-1}, x_t)} dx_{t-1} $$
 
 $L_t(x_t)$는 적분변수 $x_{t-1}$과 무관하므로 적분 밖으로 나오고, 남은 적분은 가우시안 적분 공식으로 상수가 된다. 이제 남은 일은 완전제곱을 실제로 만들어내는 것이다.
 
@@ -340,7 +340,7 @@ $$ L_t(x_{t-1}, x_t) = \tfrac{1}{2}\left( x_{t-1} - \Psi_t[A_t^T R_t^{-1}(x_t - 
 
 이 함수는 순수한 완전제곱이므로, 정규화 상수를 붙이면 변수 $x_{t-1}$에 대한 유효한 가우시안 확률밀도함수가 된다. 주의할 것은 이 성질이 어떤 기존 분포에서 물려받은 것이 아니라는 점이다. 완전제곱 꼴에 양의 정부호 곡률이면 적분이 1이 되는 것은 가우시안 적분 공식이라는 순수 미적분 사실이며, $x_t$는 중심 안에 파라미터로 앉아 있을 뿐 적분과 무관하다. 밀도함수라는 지위는 여기서 확률적 의미를 위해서가 아니라, "밀도는 적분하면 1"이라는 성질을 적분 계산기로 쓰기 위해 동원된다.
 
-$$ \int \det(2\pi\Psi_t)^{-\frac{1}{2}} \exp{-L_t(x_{t-1}, x_t)}, dx_{t-1} = 1 \quad\Longrightarrow\quad \int \exp{-L_t(x_{t-1}, x_t)}, dx_{t-1} = \det(2\pi\Psi_t)^{\frac{1}{2}} $$
+$$ \int \det(2\pi\Psi_t)^{-\frac{1}{2}} \{\exp{-L_t(x_{t-1}, x_t)} \}dx_{t-1} = 1 \quad\Longrightarrow\quad \int \{\exp{-L_t(x_{t-1}, x_t)}\}dx_{t-1} = \det(2\pi\Psi_t)^{\frac{1}{2}} $$
 
 적분 결과가 타깃 변수 $x_t$와 무관한 상수라는 점이 결정적이다. 이 상수를 정규화 상수 $\eta$에 흡수시키면 적분이 완전히 사라진다.
 
@@ -410,7 +410,7 @@ $$ \bar\mu_t = A_t \mu_{t-1} + B_t u_t, \qquad \bar\Sigma_t = A_t \Sigma_{t-1} A
 
 보정은 곱이다. 적분이 없으므로 완전제곱 분리 트릭이 필요 없고, 지수부를 합친 뒤 미분 두 번이면 끝난다. 전제 2와 방금 구한 예측 분포를 곱하면
 
-$$ bel(x_t) = \eta, p(z_t \mid x_t), \overline{bel}(x_t) = \eta \exp{-J_t} $$
+$$ bel(x_t) = \eta p(z_t \mid x_t)\overline{bel}(x_t) = \eta \exp{-J_t} $$
 
 $$ J_t = \tfrac{1}{2}(z_t - C_t x_t)^T Q_t^{-1}(z_t - C_t x_t) + \tfrac{1}{2}(x_t - \bar\mu_t)^T \bar\Sigma_t^{-1}(x_t - \bar\mu_t) $$
 
@@ -446,7 +446,13 @@ $$ \mu_t = \bar\mu_t + \underbrace{\Sigma_t C_t^T Q_t^{-1}}_{=:\ K_t} (z_t - C_t
 
 남은 것은 표기 정리다. 현재의 $K_t = \Sigma_t C_t^T Q_t^{-1}$와 $\Sigma_t = (C_t^T Q_t^{-1} C_t + \bar\Sigma_t^{-1})^{-1}$는 값은 정확하지만 역행렬 계산이 상태 차원의 큰 행렬에 걸려 있고 형태도 재귀에 불편하다. 먼저 이득을 $\Sigma_t$ 없이 표현한다. 항등원 $(C_t \bar\Sigma_t C_t^T + Q_t)(C_t \bar\Sigma_t C_t^T + Q_t)^{-1}$을 오른쪽에 끼워 넣고 전개하면
 
-$$ \begin{aligned} K_t &= \Sigma_t C_t^T Q_t^{-1} \left( C_t \bar\Sigma_t C_t^T + Q_t \right)\left( C_t \bar\Sigma_t C_t^T + Q_t \right)^{-1} \ &= \Sigma_t \left( C_t^T Q_t^{-1} C_t \bar\Sigma_t C_t^T + C_t^T \right)\left( C_t \bar\Sigma_t C_t^T + Q_t \right)^{-1} \ &= \Sigma_t \left( C_t^T Q_t^{-1} C_t + \bar\Sigma_t^{-1} \right) \bar\Sigma_t C_t^T \left( C_t \bar\Sigma_t C_t^T + Q_t \right)^{-1} \ &= \Sigma_t, \Sigma_t^{-1}, \bar\Sigma_t C_t^T \left( C_t \bar\Sigma_t C_t^T + Q_t \right)^{-1} \ &= \bar\Sigma_t C_t^T \left( C_t \bar\Sigma_t C_t^T + Q_t \right)^{-1} \end{aligned} $$
+$$\begin{aligned}
+K_t &= \Sigma_t C_t^T Q_t^{-1} \left( C_t \bar\Sigma_t C_t^T + Q_t \right)\left( C_t \bar\Sigma_t C_t^T + Q_t \right)^{-1} \\\\
+&= \Sigma_t \left( C_t^T Q_t^{-1} C_t \bar\Sigma_t C_t^T + C_t^T \right)\left( C_t \bar\Sigma_t C_t^T + Q_t \right)^{-1} \\\\
+&= \Sigma_t \left( C_t^T Q_t^{-1} C_t + \bar\Sigma_t^{-1} \right) \bar\Sigma_t C_t^T \left( C_t \bar\Sigma_t C_t^T + Q_t \right)^{-1} \\\\
+&= \Sigma_t\, \Sigma_t^{-1}\, \bar\Sigma_t C_t^T \left( C_t \bar\Sigma_t C_t^T + Q_t \right)^{-1} \\\\
+&= \bar\Sigma_t C_t^T \left( C_t \bar\Sigma_t C_t^T + Q_t \right)^{-1}
+\end{aligned}$$
 
 역행렬이 관측 공간 차원으로 내려왔다. 관측 차원이 상태 차원보다 작은 경우가 대부분이므로 계산상 큰 이득이다. 다음으로 공분산이다. $\Sigma_t = (C_t^T Q_t^{-1} C_t + \bar\Sigma_t^{-1})^{-1}$에 역행렬 정리를 다시 적용하면
 
@@ -612,11 +618,11 @@ $$ f = p(x_{0:t} \mid z_{1:t},\ u_{1:t}) $$
 
 제안은 알고리즘이 실제로 하는 일 그 자체를 적으면 된다. 직전 스텝의 파티클이 직전 사후분포를 표현한다고 가정하고(귀납 가정, 기저는 초기 belief에서의 샘플링이다), 그 궤적 끝에 이동 모델 샘플 하나를 이어 붙인다. 두 뽑기가 순차적으로 일어나므로 제안 분포는 두 분포의 곱이다.
 
-$$ g = p(x_t \mid x_{t-1},\ u_t), p(x_{0:t-1} \mid z_{1:t-1},\ u_{1:t-1}) $$
+$$ g = p(x_t \mid x_{t-1},\ u_t)p(x_{0:t-1} \mid z_{1:t-1},\ u_{1:t-1}) $$
 
 이제 가중치 $w = f/g$를 계산한다. 전략은 베이즈 필터의 수학적 유도에서 했던 것과 동일하다. 목표에서 최신 관측 $z_t$를 분리해 베이즈 정리를 적용하고, 마르코프 가정으로 조건을 정리하는 것이다. 다른 점은 상태 하나가 아니라 궤적 전체에 대해 같은 조작을 한다는 것뿐이다. 먼저 $z_t$에 대한 베이즈 정리를 쓰고, $x_{0:t}$를 포함하지 않는 분모를 정규화 상수 $\eta$로 묶으면
 
-$$ p(x_{0:t} \mid z_{1:t},\ u_{1:t}) = \eta, p(z_t \mid x_{0:t},\ z_{1:t-1},\ u_{1:t}), p(x_{0:t} \mid z_{1:t-1},\ u_{1:t}) $$
+$$ p(x_{0:t} \mid z_{1:t},\ u_{1:t}) = \eta p(z_t \mid x_{0:t},\ z_{1:t-1},\ u_{1:t})p(x_{0:t} \mid z_{1:t-1},\ u_{1:t}) $$
 
 우변 첫 항에 관측 모델의 마르코프 가정을 적용한다. 베이즈 필터 유도에서 확인했듯 현재 상태 $x_t$가 주어지면 관측은 그 외의 모든 과거와 조건부 독립이므로
 
@@ -624,7 +630,7 @@ $$ p(z_t \mid x_{0:t},\ z_{1:t-1},\ u_{1:t}) = p(z_t \mid x_t) $$
 
 이다. 우변 둘째 항은 조건부 확률의 연쇄 법칙으로 최신 상태와 과거 궤적으로 쪼갠다. 근사가 아니라 확률의 정의에서 나오는 항등 분해다.
 
-$$ p(x_{0:t} \mid z_{1:t-1},\ u_{1:t}) = p(x_t \mid x_{0:t-1},\ z_{1:t-1},\ u_{1:t}), p(x_{0:t-1} \mid z_{1:t-1},\ u_{1:t}) $$
+$$ p(x_{0:t} \mid z_{1:t-1},\ u_{1:t}) = p(x_t \mid x_{0:t-1},\ z_{1:t-1},\ u_{1:t})p(x_{0:t-1} \mid z_{1:t-1},\ u_{1:t}) $$
 
 쪼개진 앞 항에는 상태 천이의 마르코프 가정을 적용한다. 직전 상태와 현재 제어가 주어지면 $x_t$는 더 먼 과거와 조건부 독립이므로
 
@@ -636,21 +642,21 @@ $$ p(x_{0:t-1} \mid z_{1:t-1},\ u_{1:t}) = p(x_{0:t-1} \mid z_{1:t-1},\ u_{1:t-1
 
 이제 조각들을 다시 조립하면 목표가 다음과 같이 정리된다.
 
-$$ f = \eta, p(z_t \mid x_t), \underbrace{p(x_t \mid x_{t-1},\ u_t), p(x_{0:t-1} \mid z_{1:t-1},\ u_{1:t-1})}_{=\ g} $$
+$$ f = \eta p(z_t \mid x_t)\underbrace{p(x_t \mid x_{t-1},\ u_t)p(x_{0:t-1} \mid z_{1:t-1},\ u_{1:t-1})}_{=\ g} $$
 
 밑줄 친 덩어리가 정확히 제안 분포 $g$다. 목표를 전개했더니 제안이 통째로 인수로 들어 있었던 것이고, 따라서 비율에서 소거된다.
 
-$$ w_t^{[m]} = \frac{f}{g} = \frac{\eta, p(z_t \mid x_t^{[m]}), g}{g} = \eta, p(z_t \mid x_t^{[m]}) $$
+$$ w_t^{[m]} = \frac{f}{g} = \frac{\eta p(z_t \mid x_t^{[m]})g}{g} = \eta p(z_t \mid x_t^{[m]}) $$
 
 그리고 $\eta$는 1단계 말미에서 확인한 소거 성질에 의해 정규화 과정에서 사라지므로 계산할 필요가 없다. 알고리즘의 가중치 갱신 줄 $w_t^{[m]} = p(z_t \mid x_t^{[m]})$이 이렇게 유도된다. 이 결과의 의미를 음미할 필요가 있다. 관측 우도를 가중치로 쓰는 것은 그럴듯해서 고른 발견법이 아니라, 목표 대 제안의 비율이라는 엄밀한 신분을 가진 값이다. 그리고 그 비율이 우도 한 항으로 붕괴한 것은 우연이 아니다. 제안 분포가 목표에서 정확히 최신 관측 하나만 빠진 분포가 되도록 알고리즘이 설계되어 있기 때문이다. 이동 모델로 뽑는 순간 제안은 관측 직전까지의 모든 정보를 이미 담고 있고, 목표와의 차이는 $z_t$ 하나뿐이므로, 그 차이의 값어치인 $p(z_t \mid x_t)$가 가중치의 전부가 된다. 예측 샘플링과 리샘플링이 이 등식이 성립할 무대를 만드는 조연이라면, 베이즈 보정의 실체는 가중치 갱신 한 줄에 전부 실려 있는 셈이다.
 
 궤적에서 상태로 내려오는 일이 남았다. 방금 증명한 것은 가중 파티클이 궤적의 사후분포를 표현한다는 것인데, 우리가 원하는 것은 현재 상태의 belief다. 결합분포에서 뽑은 샘플의 한 성분만 남기면 그 성분은 주변분포를 따른다는 것이 주변화(marginalization)의 표본 버전이다. 실제로 $x_{0:t} \sim p(x_{0:t} \mid \cdot)$일 때 마지막 성분 $x_t$가 사건 $A$에 들어갈 확률은
 
-$$ P(x_t \in A) = \int \mathbf{1}_A(x_t), p(x_{0:t} \mid \cdot), dx_{0:t} = \int_A \left[ \int p(x_{0:t} \mid \cdot), dx_{0:t-1} \right] dx_t $$
+$$ P(x_t \in A) = \int \mathbf{1}_A(x_t)p(x_{0:t} \mid \cdot)dx_{0:t} = \int_A \left[ \int p(x_{0:t} \mid \cdot)dx_{0:t-1} \right] dx_t $$
 
 이고 대괄호 안이 주변분포의 정의이므로, 조상 부분을 그냥 버린 $x_t^{[m]}$들은
 
-$$ \int p(x_{0:t} \mid z_{1:t},\ u_{1:t}), dx_{0:t-1} = p(x_t \mid z_{1:t},\ u_{1:t}) = bel(x_t) $$
+$$ \int p(x_{0:t} \mid z_{1:t},\ u_{1:t})dx_{0:t-1} = p(x_t \mid z_{1:t},\ u_{1:t}) = bel(x_t) $$
 
 의 가중 표본이다. 알고리즘이 조상을 저장하지 않고 현재 상태만 들고 다니는 것이 이 주변화의 구현이다.
 
@@ -660,7 +666,7 @@ $$ P\left( \tilde{x} = x^{[i]} \right) = \frac{w^{[i]}}{\sum_{j=1}^{M} w^{[j]}} 
 
 이다. 새 파티클이 사건 $A$에 떨어질 확률은 $A$ 안의 파티클들에 대한 합이다.
 
-$$ P(\tilde{x} \in A) = \sum_{i:\ x^{[i]} \in A} \frac{w^{[i]}}{\sum_{j} w^{[j]}} = \frac{\frac{1}{M}\sum_{i} w^{[i]}, \mathbf{1}_A(x^{[i]})}{\frac{1}{M}\sum_{j} w^{[j]}} $$
+$$ P(\tilde{x} \in A) = \sum_{i:\ x^{[i]} \in A} \frac{w^{[i]}}{\sum_{j} w^{[j]}} = \frac{\frac{1}{M}\sum_{i} w^{[i]} \mathbf{1}_A(x^{[i]})}{\frac{1}{M}\sum_{j} w^{[j]}} $$
 
 마지막 등호에서 분자와 분모를 $M$으로 나눴다. 이제 두 표본 평균에 대수의 법칙을 적용하면, $M \to \infty$에서 분자는 1단계의 핵심 명제에 의해 $E_g[w, \mathbf{1}_A] = P_f(A)$로, 분모는 $E_g[w] = 1$로 수렴한다. 따라서
 
@@ -678,7 +684,7 @@ $$ P(\tilde{x} \in A) \longrightarrow \frac{P_f(A)}{1} = P_f(A) $$
 
 베이즈 필터의 보정 단계를 다시 보자.
 
-$$ bel(x_t) = \eta, p(z_t \mid x_t), \overline{bel}(x_t) $$
+$$ bel(x_t) = \eta p(z_t \mid x_t)\overline{bel}(x_t) $$
 
 여기서 $p(z_t \mid x_t)$ 자리에 꽂히는 부품이 측정 모델이다. 앞으로 다룰 beam model, likelihood field, feature 기반 모델은 전부 이 소켓에 꽂히는 서로 다른 부품이며, 파티클 필터(particle filter) 관점에서는 전부 파티클의 가중치를 계산하는 채점 함수다. 이 관점 하나를 붙들고 가면 이 장이 훨씬 선명해진다.
 
@@ -688,15 +694,15 @@ $$ bel(x_t) = \eta, p(z_t \mid x_t), \overline{bel}(x_t) $$
 
 측정 모델은 조건부에 맵(map) $m$을 달고 다닌다. 같은 측정이라도 어떤 세계에서 이뤄졌느냐에 따라 그럴듯함이 달라지기 때문이다. 맵은 환경에 대한 객체들의 목록으로 정의된다.
 
-$$ m = {m_1, m_2, \ldots, m_N} $$
+$$ m = \{m_1, m_2, \ldots, m_N\} $$
 
 이 장에서 주로 쓰는 형태는 점유 격자 맵(occupancy grid map)이다. 공간을 일정 크기의 셀로 나누고, 셀마다 이진 상태를 부여한다.
 
-$$ m_i \in {\text{occupied},\ \text{free}} $$
+$$ m_i \in \{\text{occupied},\ \text{free}\} $$
 
 occupied는 그 셀에 물체가 있어서 센서 빔이 거기서 막힌다는 뜻이고, free는 빔이 통과한다는 뜻이다. 물체의 정체는 묻지 않는다. 벽인지 화분인지 구별하지 않고 오직 "빔을 막느냐"라는 기하학적 사실만 저장한다. 함수의 관점으로 보면 맵은 평면의 점을 넣으면 점유 여부를 답하는 함수다.
 
-$$ m: \mathbb{R}^2 \to {\text{occupied},\ \text{free}} $$
+$$ m: \mathbb{R}^2 \to \{\text{occupied},\ \text{free}\} $$
 
 실제 맵은 노이즈 때문에 셀마다 점유 확률 $p(m_i) \in [0,1]$을 들고 있지만, 측정 모델에서는 문턱값으로 이진화한 것을 쓴다고 생각하면 된다. 이 장에서 맵은 주어진 참값으로 취급한다. 맵을 만드는 문제는 별도의 주제다.
 
@@ -704,7 +710,7 @@ $$ m: \mathbb{R}^2 \to {\text{occupied},\ \text{free}} $$
 
 시간 $t$의 측정 $z_t$는 하나의 값이 아니라 $K$개 빔의 묶음이다.
 
-$$ z_t = {z_t^1, z_t^2, \ldots, z_t^K} $$
+$$ z_t = \{z_t^1, z_t^2, \ldots, z_t^K\} $$
 
 전체 스캔의 확률은 개별 빔 확률의 곱으로 모델링한다.
 
@@ -738,13 +744,13 @@ $$ \text{시작점} = p_t + R(\theta), s_k, \qquad \text{방향} = \theta + \the
 
 첫째, 정상 명중이다. 빔이 맵에 등록된 장애물을 제대로 맞추면 측정값은 예측값 근처에서 가우시안으로 흔들린다.
 
-$$ p_{\text{hit}}(z_t^k \mid x_t, m) = \eta, \mathcal{N}(z_t^k;\ z_t^{k\ast},\ \sigma_{\text{hit}}^2) $$
+$$ p_{\text{hit}}(z_t^k \mid x_t, m) = \eta \mathcal{N}(z_t^k;\ z_t^{k\ast},\ \sigma_{\text{hit}}^2) $$
 
 $\eta$는 측정값이 $[0, z_{\max}]$ 범위로 잘리는 것을 보정하는 정규화 상수다.
 
 둘째, 예상 밖의 물체다. 맵에 없는 사람이나 물건이 빔을 중간에서 가로채면 측정값은 예측값보다 짧아진다. 가까이 있는 물체일수록 가로챌 확률이 높으므로 지수분포로 모델링한다.
 
-$$ p_{\text{short}}(z_t^k \mid x_t, m) = \eta, \lambda_{\text{short}}, e^{-\lambda_{\text{short}} z_t^k}, \qquad 0 \le z_t^k \le z_t^{k\ast} $$
+$$ p_{\text{short}}(z_t^k \mid x_t, m) = \eta\lambda_{\text{short}}e^{-\lambda_{\text{short}} z_t^k}, \qquad 0 \le z_t^k \le z_t^{k\ast} $$
 
 셋째, 완전한 실패다. 빔이 아무것도 감지하지 못하면 센서는 최대 사거리 $z_{\max}$를 반환한다. 이 사건은 딱 한 점에 몰리므로 점질량으로 표현한다.
 
@@ -774,7 +780,7 @@ $$ \Theta^\ast = \arg\max_{\Theta}\ p(Z \mid X, m, \Theta) = \arg\max_{\Theta} \
 
 E-step은 측정 하나하나에 대한 재판이다. 현재 파라미터 하에서 측정 $z_i$가 각 성분에서 나왔을 사후확률, 즉 책임값(responsibility)을 계산한다.
 
-$$ e_{i,\text{hit}} = \frac{z_{\text{hit}}, p_{\text{hit}}(z_i)}{z_{\text{hit}}, p_{\text{hit}}(z_i) + z_{\text{short}}, p_{\text{short}}(z_i) + z_{\text{max}}, p_{\text{max}}(z_i) + z_{\text{rand}}, p_{\text{rand}}(z_i)} $$
+$$ e_{i,\text{hit}} = \frac{z_{\text{hit}}p_{\text{hit}}(z_i)}{z_{\text{hit}} p_{\text{hit}}(z_i) + z_{\text{short}} p_{\text{short}}(z_i) + z_{\text{max}}, p_{\text{max}}(z_i) + z_{\text{rand}} p_{\text{rand}}(z_i)} $$
 
 분모는 네 성분의 합이고 분자만 성분별로 바꾸면 $e_{i,\text{short}}$, $e_{i,\text{max}}$, $e_{i,\text{rand}}$가 된다. 실측이 예측과 가까우면 hit의 책임이 커지고, 예측보다 한참 짧으면 short의 책임이 커지는 식으로, 맵의 예측 $z_i^\ast$가 재판의 증거로 쓰인다.
 
@@ -788,7 +794,7 @@ $$ \sigma_{\text{hit}} = \sqrt{\frac{1}{\sum_i e_{i,\text{hit}}}\ \sum_{i} e_{i,
 
 이고, 지수분포의 파라미터는 지수분포 MLE가 표본평균의 역수라는 사실의 가중 버전이다.
 
-$$ \lambda_{\text{short}} = \frac{\sum_i e_{i,\text{short}}}{\sum_i e_{i,\text{short}}, z_i} $$
+$$ \lambda_{\text{short}} = \frac{\sum_i e_{i,\text{short}}}{\sum_i e_{i,\text{short}} z_i} $$
 
 두 스텝을 수렴할 때까지 반복하면 각 반복에서 로그 우도가 단조 증가함이 보장된다. 의미를 되새기면, 이 학습이 조정하는 것은 가우시안의 퍼짐 정도와 지수함수의 기울기이지, 예측 함수 $z^\ast(x)$의 모양이 아니다. $z^\ast(x)$는 레이캐스팅이라는 기하학이 정하는 것이므로 $\Theta$를 아무리 잘 맞춰도 바뀌지 않는다. 이 구분이 바로 다음 절의 복선이다.
 
