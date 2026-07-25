@@ -151,7 +151,7 @@ $$ \overline{bel}(x_t) = p(x_t \mid z_{1:t-1}, u_{1:t}) $$
 
 보정(correction)은 이번 관측 $z_t$를 반영해 예측 belief를 다듬는 과정이다. 관측이라는 새로운 증거가 들어오면서 불확실성이 줄어든다. 분포가 좁혀지는 것이다.
 
-$$ bel(x_t) = \eta p(z_t \mid x_t)\overline{bel}(x_t) $$
+$$ bel(x_t) = \eta \, p(z_t \mid x_t) \, \overline{bel}(x_t) $$
 
 정리하면 belief는 예측에서 한 번 퍼졌다가 보정에서 다시 좁혀지는 호흡을 매 순간 반복한다. 예측은 믿음을 흐리게 만들고, 관측은 다시 또렷하게 만든다.
 
