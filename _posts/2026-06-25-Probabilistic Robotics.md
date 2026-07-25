@@ -74,13 +74,16 @@ $p(x∣z)=p(z∣x) p(x)p(z)p(x \mid z) = \frac{p(z \mid x), p(x)}{p(z)}p(x∣z
 
 여기서 분모 $p(z)$는 모든 가능한 상태에 대해 합(이산) 또는 적분(연속)하여 구하는 정규화 항이다.
 
-$$ p(x \mid z) = \frac{p(z \mid x), p(x)}{p(z)} $$
+$$ p(x \mid z) = \frac{p(z \mid x)p(x)}{p(z)} $$
 
 이 정규화 항은 사후분포 전체의 합(또는 적분)이 1이 되도록 맞춰주는 역할만 하므로, 비례 관계로 간단히 표현하면 핵심이 더 선명해진다.
 
-$$ \begin{aligned} p(z) &= \sum_{x} p(z \mid x), p(x) && \text{(이산)} \[6pt] p(z) &= \int p(z \mid x), p(x), dx && \text{(연속)} \end{aligned} $$
+$$\begin{aligned}
+p(z) &= \sum_{x} p(z \mid x)\, p(x) && \text{(이산)} \\[6pt]
+p(z) &= \int p(z \mid x)\, p(x)\, dx && \text{(연속)}
+\end{aligned}$$
 
-$$ \underbrace{p(x \mid z)}_{\text{posterior}} ;\propto; \underbrace{p(z \mid x)}_{\text{likelihood}} ;\cdot; \underbrace{p(x)}_{\text{prior}} $$
+$$ \underbrace{p(x \mid z)}_{\text{posterior}} \propto \underbrace{p(z \mid x)}_{\text{likelihood}} \cdot \underbrace{p(x)}_{\text{prior}} $$
 
 **의미론적 베이즈 정리**
 
@@ -148,7 +151,7 @@ $$ \overline{bel}(x_t) = p(x_t \mid z_{1:t-1}, u_{1:t}) $$
 
 보정(correction)은 이번 관측 $z_t$를 반영해 예측 belief를 다듬는 과정이다. 관측이라는 새로운 증거가 들어오면서 불확실성이 줄어든다. 분포가 좁혀지는 것이다.
 
-$$ bel(x_t) = \eta, p(z_t \mid x_t), \overline{bel}(x_t) $$
+$$ bel(x_t) = \eta p(z_t \mid x_t)\overline{bel}(x_t) $$
 
 정리하면 belief는 예측에서 한 번 퍼졌다가 보정에서 다시 좁혀지는 호흡을 매 순간 반복한다. 예측은 믿음을 흐리게 만들고, 관측은 다시 또렷하게 만든다.
 
@@ -158,11 +161,11 @@ $$ bel(x_t) = \eta, p(z_t \mid x_t), \overline{bel}(x_t) $$
 
 예측 단계는 다음과 같다.
 
-$$ \overline{bel}(x_t) = \int p(x_t \mid x_{t-1}, u_t), bel(x_{t-1}), dx_{t-1} $$
+$$ \overline{bel}(x_t) = \int p(x_t \mid x_{t-1}, u_t)bel(x_{t-1})dx_{t-1} $$
 
 보정 단계는 다음과 같다.
 
-$$ bel(x_t) = \eta, p(z_t \mid x_t), \overline{bel}(x_t) $$
+$$ bel(x_t) = \eta p(z_t \mid x_t)\overline{bel}(x_t) $$
 
 **수학적 유도**
 
@@ -172,11 +175,11 @@ $$ bel(x_t) = p(x_t \mid z_{1:t}, u_{1:t}) $$
 
 먼저 가장 최근 관측 $z_t$를 나머지 이력과 분리한 뒤, $z_t$에 대해 베이즈 정리를 적용한다.
 
-$$ bel(x_t) = \frac{p(z_t \mid x_t, z_{1:t-1}, u_{1:t}), p(x_t \mid z_{1:t-1}, u_{1:t})}{p(z_t \mid z_{1:t-1}, u_{1:t})} $$
+$$ bel(x_t) = \frac{p(z_t \mid x_t, z_{1:t-1}, u_{1:t})p(x_t \mid z_{1:t-1}, u_{1:t})}{p(z_t \mid z_{1:t-1}, u_{1:t})} $$
 
 분모는 $x_t$를 포함하지 않으므로 정규화 상수 $\eta$로 묶는다.
 
-$$ bel(x_t) = \eta, p(z_t \mid x_t, z_{1:t-1}, u_{1:t}), p(x_t \mid z_{1:t-1}, u_{1:t}) $$
+$$ bel(x_t) = \eta p(z_t \mid x_t, z_{1:t-1}, u_{1:t})p(x_t \mid z_{1:t-1}, u_{1:t}) $$
 
 여기서 관측 모델의 마르코프 가정을 적용한다. 현재 상태 $x_t$가 주어지면 관측 $z_t$는 과거와 조건부 독립(Conditional Independence)이므로 다음이 성립한다. (Absolute Independence와 Conditional Independence는 완전히 다르니 주의)
 
@@ -188,11 +191,11 @@ $$ p(x_t \mid z_{1:t-1}, u_{1:t}) = \overline{bel}(x_t) $$
 
 이 둘을 대입하면 보정 단계가 완성된다.
 
-$$ bel(x_t) = \eta, p(z_t \mid x_t), \overline{bel}(x_t) $$
+$$ bel(x_t) = \eta p(z_t \mid x_t)\overline{bel}(x_t) $$
 
 이제 예측 belief $\overline{bel}(x_t)$를 직전 belief로 풀어낸다. 전체 확률의 법칙으로 직전 상태 $x_{t-1}$을 끌어들인다.
 
-$$ \overline{bel}(x_t) = \int p(x_t \mid x_{t-1}, z_{1:t-1}, u_{1:t}), p(x_{t-1} \mid z_{1:t-1}, u_{1:t}), dx_{t-1} $$
+$$ \overline{bel}(x_t) = \int p(x_t \mid x_{t-1}, z_{1:t-1}, u_{1:t})p(x_{t-1} \mid z_{1:t-1}, u_{1:t})dx_{t-1} $$
 
 여기서 상태 천이 모델의 마르코프 가정을 적용한다. 직전 상태 $x_{t-1}$과 제어 $u_t$가 주어지면 $x_t$는 과거와 조건부 독립이다.
 
@@ -204,7 +207,7 @@ $$ p(x_{t-1} \mid z_{1:t-1}, u_{1:t}) = bel(x_{t-1}) $$
 
 대입하면 예측 단계가 완성된다.
 
-$$ \overline{bel}(x_t) = \int p(x_t \mid x_{t-1}, u_t), bel(x_{t-1}), dx_{t-1} $$
+$$ \overline{bel}(x_t) = \int p(x_t \mid x_{t-1}, u_t)bel(x_{t-1})dx_{t-1} $$
 
 이렇게 예측과 보정 두 단계가 유도되었다. 한 번 얻은 $bel(x_t)$는 다음 타임스텝에서 $bel(x_{t-1})$의 자리로 들어가 다시 예측의 재료가 된다. 오늘의 결론이 내일의 출발점이 되는 이 재귀가 베이즈 필터의 핵심이다.
 
@@ -320,7 +323,12 @@ $$ A_t^T R_t^{-1}(x_t - A_t x_{t-1} - B_t u_t) = \Sigma_{t-1}^{-1}(x_{t-1} - \mu
 
 $x_{t-1}$이 든 항을 좌변으로 모은다.
 
-$$ \begin{aligned} A_t^T R_t^{-1}(x_t - B_t u_t) - A_t^T R_t^{-1} A_t\ x_{t-1} &= \Sigma_{t-1}^{-1} x_{t-1} - \Sigma_{t-1}^{-1} \mu_{t-1} \ (A_t^T R_t^{-1} A_t + \Sigma_{t-1}^{-1})\ x_{t-1} &= A_t^T R_t^{-1}(x_t - B_t u_t) + \Sigma_{t-1}^{-1} \mu_{t-1} \ \Psi_t^{-1}\ x_{t-1} &= A_t^T R_t^{-1}(x_t - B_t u_t) + \Sigma_{t-1}^{-1} \mu_{t-1} \ x_{t-1} &= \Psi_t \left[ A_t^T R_t^{-1}(x_t - B_t u_t) + \Sigma_{t-1}^{-1} \mu_{t-1} \right] \end{aligned} $$
+$$\begin{aligned}
+A_t^T R_t^{-1}(x_t - B_t u_t) - A_t^T R_t^{-1} A_t\ x_{t-1} &= \Sigma_{t-1}^{-1} x_{t-1} - \Sigma_{t-1}^{-1} \mu_{t-1} \\\\
+(A_t^T R_t^{-1} A_t + \Sigma_{t-1}^{-1})\ x_{t-1} &= A_t^T R_t^{-1}(x_t - B_t u_t) + \Sigma_{t-1}^{-1} \mu_{t-1} \\\\
+\Psi_t^{-1}\ x_{t-1} &= A_t^T R_t^{-1}(x_t - B_t u_t) + \Sigma_{t-1}^{-1} \mu_{t-1} \\\\
+x_{t-1} &= \Psi_t \left[ A_t^T R_t^{-1}(x_t - B_t u_t) + \Sigma_{t-1}^{-1} \mu_{t-1} \right]
+\end{aligned}$$
 
 여기서 오해하기 쉬운 지점을 짚고 가자. 이 계산은 "최적의 $x_{t-1}$을 고르는 최적화"가 아니다. 2차식에서 도함수가 0이 되는 해는 언제나 완전제곱의 중심 그 자체이므로, 이 계산의 정체는 $L_t$ 안에 이미 박혀 있던 중심 좌표를 추출하는 기계적 절차다. 그 점이 하필 최솟값이기도 한 것은 볼록 2차식에서 중심과 최소점이 같은 점이라는 부수적 사실일 뿐이다.
 
@@ -344,11 +352,11 @@ $$ L_t(x_t) = L_t - L_t(x_{t-1}, x_t) $$
 
 그런데 여기서 정당한 의문이 생긴다. 이렇게 뺀 결과에 정말 $x_{t-1}$이 하나도 안 남는다는 보장이 있는가. 보장은 저절로 오지 않고 검산으로 확정된다. 양쪽을 전부 전개해 $x_{t-1}$의 차수별로 모으면 다음과 같다. 전체 $L_t$에서 나오는 $x_{t-1}$ 항은
 
-$$ \underbrace{\tfrac{1}{2} x_{t-1}^T A_t^T R_t^{-1} A_t, x_{t-1} + \tfrac{1}{2} x_{t-1}^T \Sigma_{t-1}^{-1} x_{t-1}}_{\text{2차항}} ;\underbrace{-; x_{t-1}^T A_t^T R_t^{-1}(x_t - B_t u_t) - x_{t-1}^T \Sigma_{t-1}^{-1}\mu_{t-1}}_{\text{1차항}} $$
+$$ \underbrace{\tfrac{1}{2} x_{t-1}^T A_t^T R_t^{-1} A_t, x_{t-1} + \tfrac{1}{2} x_{t-1}^T \Sigma_{t-1}^{-1} x_{t-1}}_{\text{2차항}} \underbrace{-\ x_{t-1}^T A_t^T R_t^{-1}(x_t - B_t u_t) - x_{t-1}^T \Sigma_{t-1}^{-1}\mu_{t-1}}_{\text{1차항}} $$
 
 이고, 완전제곱 조각을 빼면서 나오는 $x_{t-1}$ 항은 부호가 반전되어
 
-$$ -\tfrac{1}{2} x_{t-1}^T (A_t^T R_t^{-1} A_t + \Sigma_{t-1}^{-1}), x_{t-1} ;+; x_{t-1}^T \left[ A_t^T R_t^{-1}(x_t - B_t u_t) + \Sigma_{t-1}^{-1}\mu_{t-1} \right] $$
+$$ -\tfrac{1}{2} x_{t-1}^T (A_t^T R_t^{-1} A_t + \Sigma_{t-1}^{-1}), x_{t-1} + x_{t-1}^T \left[ A_t^T R_t^{-1}(x_t - B_t u_t) + \Sigma_{t-1}^{-1}\mu_{t-1} \right] $$
 
 이다. 2차항끼리 보면 $\Psi_t^{-1} = A_t^T R_t^{-1} A_t + \Sigma_{t-1}^{-1}$이므로 정확히 소거되고, 1차항끼리 보면 대괄호가 전체 쪽 1차항의 합과 동일하므로 역시 소거된다. 이 소거는 우연이 아니라 설계다. 곡률을 이계도함수로, 중심을 일계도함수의 영점으로 정의한 순간 이 상쇄는 예약되어 있었다. 살아남는 것은 $x_{t-1}$이 원래 없던 항들과, 완전제곱을 빼며 딸려 나온 중심값 보정항뿐이다.
 
@@ -356,7 +364,7 @@ $$ L_t(x_t) = \tfrac{1}{2}(x_t - B_t u_t)^T R_t^{-1}(x_t - B_t u_t) + \tfrac{1}{
 
 중요한 것은 잔여항이 버려지지 않았다는 사실이다. 스칼라 평방완성 $\tfrac{1}{2}ax^2 - bx = \tfrac{1}{2}a(x - b/a)^2 - b^2/2a$에서 마지막 보정항이 반드시 남듯, 여기서도 $x_{t-1}$ 문제에서 밀려난 정보가 전부 $L_t(x_t)$로 이사했고, 이것이 그대로 $\overline{bel}(x_t)$의 지수부가 된다.
 
-**예측 분포**
+**예측 분포 끝내기**
 
 $L_t(x_t)$는 $x_t$의 2차식이다. 따라서 $\overline{bel}(x_t) = \eta\exp{-L_t(x_t)}$는 가우시안 밀도의 꼴이며, 이는 가정이 아니라 방금 계산으로 도출된 결론이다. 남은 일은 이 가우시안의 평균과 공분산을 읽어내는 것인데, 방법은 앞과 완전히 동일하다. 이계도함수로 곡률을, 일계도함수의 영점으로 중심을 추출한다. 같은 기술이 변수만 바꿔 두 번째로 재사용되는 것이다.
 
@@ -454,13 +462,19 @@ $$ \Sigma_t = \left( I - K_t C_t \right) \bar\Sigma_t $$
 
 이상의 유도를 모으면 칼만 필터는 다섯 줄로 완성된다. 입력은 직전 belief $(\mu_{t-1}, \Sigma_{t-1})$과 제어 $u_t$, 관측 $z_t$이고, 출력은 새 belief $(\mu_t, \Sigma_t)$다.
 
-$$ \begin{aligned} \bar\mu_t &= A_t \mu_{t-1} + B_t u_t \ \bar\Sigma_t &= A_t \Sigma_{t-1} A_t^T + R_t \ K_t &= \bar\Sigma_t C_t^T \left( C_t \bar\Sigma_t C_t^T + Q_t \right)^{-1} \ \mu_t &= \bar\mu_t + K_t \left( z_t - C_t \bar\mu_t \right) \ \Sigma_t &= \left( I - K_t C_t \right) \bar\Sigma_t \end{aligned} $$
+$$\begin{aligned}
+\bar\mu_t &= A_t \mu_{t-1} + B_t u_t \\\\
+\bar\Sigma_t &= A_t \Sigma_{t-1} A_t^T + R_t \\\\
+K_t &= \bar\Sigma_t C_t^T \left( C_t \bar\Sigma_t C_t^T + Q_t \right)^{-1} \\\\
+\mu_t &= \bar\mu_t + K_t \left( z_t - C_t \bar\mu_t \right) \\\\
+\Sigma_t &= \left( I - K_t C_t \right) \bar\Sigma_t
+\end{aligned}$$
 
 앞의 두 줄이 예측, 뒤의 세 줄이 보정이다. 출력 $(\mu_t, \Sigma_t)$는 다음 타임스텝에서 입력 자리로 들어가 재귀가 영원히 돈다. 유도 전체를 관통한 뼈대는 결국 하나였다. 선형 가우시안 전제 하에서 음의 로그 belief는 언제나 2차식이고, 2차식이면 이계도함수(Hessian)의 역으로 공분산을, 일계도함수의 영점으로 평균을 기계적으로 읽어낼 수 있으며, 유일한 난관이었던 예측 단계의 적분은 완전제곱 분리로 상수화하여 소거한다. 이 뼈대는 변수만 바꿔 세 번($x_{t-1}$, 예측의 $x_t$, 보정의 $x_t$) 반복되었다.
 
 ### Extended Kalman Filter
 
-**선형성이 깨지는 상황**
+**선형성이 무너지는 순간**
 
 칼만 필터의 세 전제 중 현실에서 가장 먼저 깨지는 것이 선형성이다. 일정한 병진·회전 속도로 움직이는 로봇만 해도 원호를 그리며 이동하므로 상태 천이에 삼각함수가 들어가고, 거리·베어링 센서의 관측 모델에도 비선형이 낀다. 실제 시스템의 상태 천이와 관측은 일반적으로 비선형 함수 $g$와 $h$로 기술된다.
 
@@ -484,7 +498,15 @@ $G_t$와 $H_t$는 자코비안(Jacobian) 행렬이다. 선형 칼만 필터에�
 
 **EKF 알고리즘**
 
-$$ \begin{aligned} \bar\mu_t &= g(u_t, \mu_{t-1}) \ \bar\Sigma_t &= G_t \Sigma_{t-1} G_t^T + R_t \ K_t &= \bar\Sigma_t H_t^T \left( H_t \bar\Sigma_t H_t^T + Q_t \right)^{-1} \ \mu_t &= \bar\mu_t + K_t \left( z_t - h(\bar\mu_t) \right) \ \Sigma_t &= \left( I - K_t H_t \right) \bar\Sigma_t \end{aligned} $$
+$$
+\begin{aligned}
+\bar\mu_t &= g(u_t, \mu_{t-1}) \\\\
+\bar\Sigma_t &= G_t \Sigma_{t-1} G_t^T + R_t \\\\
+K_t &= \bar\Sigma_t H_t^T \left( H_t \bar\Sigma_t H_t^T + Q_t \right)^{-1} \\\\
+\mu_t &= \bar\mu_t + K_t \left( z_t - h(\bar\mu_t) \right) \\\\
+\Sigma_t &= \left( I - K_t H_t \right) \bar\Sigma_t
+\end{aligned}
+$$
 
 칼만 필터와의 차이는 정확히 두 종류다. 첫째, 평균의 전파는 근사 없이 진짜 비선형 함수를 쓴다. 예측 평균은 $g(u_t, \mu_{t-1})$이고, 혁신은 $z_t - h(\bar\mu_t)$다. 평균이라는 한 점을 통과시키는 데에는 선형화가 필요 없기 때문이다. 둘째, 공분산의 전파와 칼만 이득은 자코비안 $G_t$, $H_t$를 쓴다. 분포의 퍼짐을 통과시키는 데에는 함수의 국소 기울기가 필요하기 때문이다. 요약하면 점은 비선형 그대로, 퍼짐은 접선으로 흘려보내는 것이 EKF다.
 
@@ -538,7 +560,18 @@ $$ w_t^{[m]} = p(z_t \mid x_t^{[m]}) $$
 
 전체 알고리즘을 의사코드로 정리하면 다음과 같다.
 
-$$ \begin{aligned} &\text{Algorithm Particle filter}(\mathcal{X}_{t-1}, u_t, z_t): \ &\quad \bar{\mathcal{X}}_t = \mathcal{X}_t = \emptyset \ &\quad \text{for } m = 1 \text{ to } M: \ &\qquad \text{sample } x_t^{[m]} \sim p(x_t \mid u_t,\ x_{t-1}^{[m]}) \ &\qquad w_t^{[m]} = p(z_t \mid x_t^{[m]}) \ &\qquad \bar{\mathcal{X}}_t = \bar{\mathcal{X}}_t + \langle x_t^{[m]},\ w_t^{[m]} \rangle \ &\quad \text{for } m = 1 \text{ to } M: \ &\qquad \text{draw } i \text{ with probability} \propto w_t^{[i]} \ &\qquad \text{add } x_t^{[i]} \text{ to } \mathcal{X}_t \ &\quad \text{return } \mathcal{X}_t \end{aligned} $$
+$$\begin{aligned}
+&\text{Algorithm Particle filter}(\mathcal{X}_{t-1}, u_t, z_t): \\\\
+&\quad \bar{\mathcal{X}}_t = \mathcal{X}_t = \emptyset \\\\
+&\quad \text{for } m = 1 \text{ to } M \text{:} \\\\
+&\qquad \text{sample } x_t^{[m]} \sim p(x_t \mid u_t,\ x_{t-1}^{[m]}) \\\\
+&\qquad w_t^{[m]} = p(z_t \mid x_t^{[m]}) \\\\
+&\qquad \bar{\mathcal{X}}_t = \bar{\mathcal{X}}_t + \langle x_t^{[m]},\ w_t^{[m]} \rangle \\\\
+&\quad \text{for } m = 1 \text{ to } M \text{:} \\\\
+&\qquad \text{draw } i \text{ with probability } \propto w_t^{[i]} \\\\
+&\qquad \text{add } x_t^{[i]} \text{ to } \mathcal{X}_t \\\\
+&\quad \text{return } \mathcal{X}_t
+\end{aligned}$$
 
 중간 산물 $\bar{\mathcal{X}}_t$가 예측 belief $\overline{bel}(x_t)$의 파티클 표현이고, 리샘플링을 거친 $\mathcal{X}_t$가 사후 belief $bel(x_t)$의 파티클 표현이다. 그런데 이 대응이 정말 성립하는가. 파티클을 이동 모델에서 뽑아놓고, 왜 관측 우도를 곱해 리샘플링하면 사후분포의 샘플이 되는가. 칼만 필터의 닫힘 성질이 그랬듯 이것도 선언이 아니라 증명이 필요한 명제이며, 증명의 뼈대는 중요도 샘플링(importance sampling)이라는 원리 하나다.
 
@@ -552,7 +585,14 @@ $$ x^{[m]} \sim g, \qquad w^{[m]} = \frac{f(x^{[m]})}{g(x^{[m]})} $$
 
 이 가중 표본이 $f$를 올바르게 표현한다는 것이 핵심 명제다. 임의의 사건 $A$에 대해, 지시함수 $\mathbf{1}_A$를 붙인 가중치의 기대값을 계산해 보자. 샘플이 $g$를 따르므로 기대값은 $g$에 대한 적분이다.
 
-$$ \begin{aligned} E_g\left[ w(x), \mathbf{1}_A(x) \right] &= \int w(x), \mathbf{1}_A(x), g(x), dx \[4pt] &= \int \frac{f(x)}{g(x)}, \mathbf{1}_A(x), g(x), dx \[4pt] &= \int_A f(x), dx \[4pt] &= P_f(A) \end{aligned} $$
+$$
+\begin{aligned}
+E_g\left[ w(x)\, \mathbf{1}_A(x) \right] &= \int w(x)\, \mathbf{1}_A(x)\, g(x)\, dx \\\\[4pt]
+&= \int \frac{f(x)}{g(x)}\, \mathbf{1}_A(x)\, g(x)\, dx \\\\[4pt]
+&= \int_A f(x)\, dx \\\\[4pt]
+&= P_f(A)
+\end{aligned}
+$$
 
 $g$가 분모와 분자에서 정확히 소거되는 둘째 줄이 증명의 전부다. 가중치를 확률 질량처럼 취급해 사건 $A$에 떨어진 가중치를 세면, 그 기대값은 목표 분포가 $A$에 부여하는 확률과 일치한다. 잘못된 분포에서 뽑았다는 죄를 가중치가 정확히 사면하는 것이다. 대수의 법칙에 의해 표본 평균은 기대값으로 수렴하므로, $M \to \infty$에서 가중 표본은 $f$의 어떤 확률도 올바르게 재현한다. 특수한 경우로 $A$를 전체 공간으로 잡으면
 
@@ -624,7 +664,7 @@ $$ P(\tilde{x} \in A) = \sum_{i:\ x^{[i]} \in A} \frac{w^{[i]}}{\sum_{j} w^{[j]}
 
 마지막 등호에서 분자와 분모를 $M$으로 나눴다. 이제 두 표본 평균에 대수의 법칙을 적용하면, $M \to \infty$에서 분자는 1단계의 핵심 명제에 의해 $E_g[w, \mathbf{1}_A] = P_f(A)$로, 분모는 $E_g[w] = 1$로 수렴한다. 따라서
 
-$$ P(\tilde{x} \in A) ;\longrightarrow; \frac{P_f(A)}{1} = P_f(A) $$
+$$ P(\tilde{x} \in A) \longrightarrow \frac{P_f(A)}{1} = P_f(A) $$
 
 리샘플링된 비가중 파티클은 목표 분포 $f$, 곧 $bel(x_t)$를 따르는 표본이 된다. 그리고 이 결과가 다음 스텝에서 2단계의 귀납 가정을 다시 성립시킨다. 초기 파티클을 초기 belief에서 뽑아두는 것이 귀납의 기저이고, 매 스텝 세 단계가 반복되며 표현이 유지된다. 유도 전체를 관통한 뼈대는 결국 하나였다. 뽑기 쉬운 분포에서 뽑고, 목표 대 제안의 비율로 죄를 사면하며, 알고리즘의 설계 덕분에 그 비율이 최신 관측의 우도 한 항으로 붕괴한다는 것이다.
 
@@ -644,7 +684,7 @@ $$ bel(x_t) = \eta, p(z_t \mid x_t), \overline{bel}(x_t) $$
 
 ### Map and Measurement
 
-**Map**
+**맵**
 
 측정 모델은 조건부에 맵(map) $m$을 달고 다닌다. 같은 측정이라도 어떤 세계에서 이뤄졌느냐에 따라 그럴듯함이 달라지기 때문이다. 맵은 환경에 대한 객체들의 목록으로 정의된다.
 
@@ -672,7 +712,7 @@ $$ p(z_t \mid x_t, m) = \prod_{k=1}^{K} p(z_t^k \mid x_t, m) $$
 
 이 곱이 성립하려면 빔들이 조건부 독립이어야 하는데, 솔직히 말하면 이 가정은 거짓이다. 이웃한 빔들은 같은 벽면을 보고, 지도에 없는 사람 한 명이 여러 빔을 동시에 가리며, 센서의 온도 드리프트는 모든 빔에 공통으로 낀다. 이런 종속성을 만들어내는 잠재 변수(latent variable)들을 전부 모델에 넣으면 계산이 폭발하므로 무시하고 곱을 쓴다. 이 거짓말의 대가는 뒤의 실제 활용 절에서 청구서로 돌아온다.
 
-**likelihood 활용**
+**측정 모델을 읽는 방향**
 
 $p(z_t \mid x_t, m)$은 문법적으로 $z$에 대한 확률이다. $x$를 고정하면 $z$ 방향으로 적분해서 1이 되는 정상적인 분포다. 그런데 위치추정에서 이 함수를 쓸 때는 반대로 읽는다. 스캔 $z_t$는 이미 들어와서 고정된 데이터이고, 움직이는 것은 포즈 가설 $x_t$ 쪽이다. $z$를 고정하고 $x$의 함수로 읽은 것을 우도(likelihood)라 부르며, 이 장의 알고리즘들이 반환하는 값 $q$가 정확히 그것이다.
 
@@ -682,7 +722,7 @@ $q$의 의미를 한 문장으로 압축하면 이렇다. 포즈 가설 $x_t$가
 
 ### Beam Model
 
-**Measurement Algorithm**
+**기본 측정 알고리즘**
 
 빔 모델(beam model)은 레이저 빔 하나가 겪을 수 있는 운명을 네 가지로 분류하고, 각각을 확률분포로 만들어 섞는다. 재료가 되는 것은 예측 거리 $z_t^{k\ast}$다. 포즈 가설 $x_t$에서 맵 $m$을 향해 가상의 레이저를 쏘아, 처음 만나는 occupied 셀까지의 거리를 계산한 값이다. 이 절차를 레이캐스팅(ray casting)이라 부른다.
 
@@ -716,7 +756,7 @@ $$ p_{\text{rand}}(z_t^k \mid x_t, m) = \frac{1}{z_{\max}} $$
 
 최종 모델은 네 분포의 가중 혼합이다.
 
-$$ p(z_t^k \mid x_t, m) = \begin{pmatrix} z_{\text{hit}} \ z_{\text{short}} \ z_{\text{max}} \ z_{\text{rand}} \end{pmatrix}^{T} \cdot \begin{pmatrix} p_{\text{hit}} \ p_{\text{short}} \ p_{\text{max}} \ p_{\text{rand}} \end{pmatrix}, \qquad z_{\text{hit}} + z_{\text{short}} + z_{\text{max}} + z_{\text{rand}} = 1 $$
+$$ p(z_t^k \mid x_t, m) = \begin{pmatrix} z_{\text{hit}} \\\\ z_{\text{short}} \\\\ z_{\text{max}} \\\\ z_{\text{rand}} \end{pmatrix}^{T} \cdot \begin{pmatrix} p_{\text{hit}} \\\\ p_{\text{short}} \\\\ p_{\text{max}} \\\\ p_{\text{rand}} \end{pmatrix}, \qquad z_{\text{hit}} + z_{\text{short}} + z_{\text{max}} + z_{\text{rand}} = 1$$
 
 표기에 대해 한 가지 경고를 남긴다. 이 책에서 $z$라는 글자는 세 가지 전혀 다른 역할로 재활용된다. $z_t^k$는 측정값(확률변수), $z_{\max}$는 사거리 상수(미터), $z_{\text{hit}}$ 같은 것들은 혼합 가중치(무차원 확률)다. 특히 $z_{\max}$는 조건문에서는 거리로, 혼합식에서는 가중치로 겸직한다. 아래첨자가 시간이나 빔 번호면 측정값이고 단어면 파라미터라고 구분해서 읽어야 하며, 혼합 가중치들은 맵에서 나온 정보가 아니라 센서의 고장 통계라는 점을 놓치면 안 된다.
 
@@ -763,6 +803,8 @@ Beam model은 센서의 물리에 충실한 정직한 모델이지만, particle 
 셋째, 독립 가정발 과신이다. 이웃 빔들이 같은 벽을 보는데 독립인 척 수백 개를 곱하면, 우도의 봉우리가 실제 정보량이 정당화하는 것보다 훨씬 뾰족해진다. 사후분포가 과도하게 좁아지면 particle filter는 오답에 조기 수렴한 뒤 회복하지 못한다.
 
 ### Likelihood Field
+
+**발상의 전환**
 
 Beam model의 병리는 전부 $z^\ast(x)$라는 함수, 즉 레이캐스팅에서 나왔다. 유사가능도 필드(likelihood field)의 발상은 그 함수를 통째로 버리는 것이다. 예측 거리를 만들어 실측과 비교하는 대신, 실측을 그대로 믿고 지도에 찍어본 뒤 그 점이 장애물 근처에 있는지만 묻는다.
 
@@ -847,7 +889,7 @@ $$ x = m_{j,x} + \hat{r}\cos\hat{\gamma}, \qquad y = m_{j,y} + \hat{r}\sin\hat{\
 
 이 장의 모델들을 실제 시스템에 넣을 때 반복적으로 마주치는 논점들을 정리한다.
 
-**Non-smooth likelihood와 particle filter 조합**
+**비평활 우도와 particle filter의 궁합**
 
 물리적으로 현실적인 범위 센서 모델일수록 우도가 포즈에 대해 부드럽지 않을 가능성이 높고, 이는 particle filter에서 실질적인 문제를 일으킨다. Beam model에서 보았듯 레이캐스팅 기반 예측은 환경의 기하(문틈, 모서리, 얇은 기둥)를 그대로 물려받아 절벽과 바늘로 가득한 지형을 만든다. 파티클은 유한하므로 바늘 꼭대기에 우연히 앉은 파티클이 없으면 전원이 바닥의 무의미한 점수를 받고, 리샘플링은 방향 정보 없이 공회전한다. 모델의 물리적 정확성과 알고리즘의 탐색 가능성은 별개의 미덕이며 종종 충돌한다는 것, 그리고 필요하면 후자를 위해 전자를 의도적으로 희생해야 한다는 것이 이 장의 가장 중요한 교훈이다. Likelihood field가 바로 그 희생의 산물이다.
 
