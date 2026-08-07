@@ -8,17 +8,17 @@
         "type": "tabs",
         "children": [
           {
-            "id": "40c87764a98905d6",
+            "id": "549d1ae1d2cc04d5",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_posts/2026-06-25-Probabilistic Robotics.md",
+                "file": "_posts/2026-07-01-Spectral_Graph_Theory.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-06-25-Probabilistic Robotics"
+              "title": "2026-07-01-Spectral_Graph_Theory"
             }
           }
         ]
@@ -41,7 +41,9 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical",
-                "autoReveal": false
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-folder-closed",
               "title": "파일 탐색기"
@@ -183,36 +185,39 @@
       "bases:새 베이스 생성하기": false
     }
   },
-  "active": "40c87764a98905d6",
+  "active": "549d1ae1d2cc04d5",
   "lastOpenFiles": [
+    "_site/assets/post/2026-07-01-Spectral Graph Theory Basic/1_7.webp",
+    "assets/post/2026-07-01-Spectral Graph Theory Basic/1_7.webp",
+    "assets/post/2026-07-01-Spectral Graph Theory Basic/Unconfirmed 703605.crdownload",
+    "_site/assets/post/2026-07-01-Spectral Graph Theory Basic/1_7.svg",
+    "assets/post/2026-07-01-Spectral Graph Theory Basic/1_7.svg",
+    "assets/post/2026-07-01-Spectral Graph Theory Basic/Unconfirmed 316315.crdownload",
+    "_site/posts/Spectral_Graph_Theory/index.html",
+    "_site/posts/Spectral_Graph_Theory",
+    "_posts/2026-07-27-A-path-towards-autonomous-machine-intelligence.md",
+    "_site/posts/A-path-towards-autonomous-machine-intelligence/index.html",
+    "_site/posts/A-path-towards-autonomous-machine-intelligence",
+    "_site/tags/paper/index.html",
+    "_site/tags/paper",
+    "_posts/2026-01-17-Hello, RISC-V!.md",
     "_posts/2026-07-20-Image-Deploy.md",
+    "_posts/2026-07-01-Spectral_Graph_Theory.md",
+    "_posts/무제 1.md",
+    "_posts/2026-06-25-Probabilistic Robotics.md",
     "assets/post/2026-06-25-Probabilistic Robotics/robo.gif",
     "assets/post/2026-07-01-Spectral Graph Theory Basic/1_1.png",
-    "_posts/2026-06-25-Probabilistic Robotics.md",
     "assets/post/2026-06-25-Probabilistic.md",
-    "_posts/2026-07-01-Spectral_Graph_Theory_Basic.md",
-    "_posts/2026-01-17-Hello, RISC-V!.md",
     "_posts/2026-07-01-Spectral Graph Theory Basic.md",
     "_posts/2026-07-20-Image-Deploy1.md",
     "_site/posts/Image-Deploy1/index.html",
     "_site/posts/Image-Deploy1",
-    "_site/posts/Image-Deploy/index.html",
-    "_site/posts/Image-Deploy",
-    "_site/assets/post/2026-07-20-Image-Deploy/gpedit-code.txt",
     "_site/assets/post/2026-07-20-Image-Deploy/7.png",
     "_site/assets/post/2026-07-20-Image-Deploy/6.png",
     "_site/assets/post/2026-07-20-Image-Deploy/5.png",
     "_site/assets/post/2026-07-20-Image-Deploy/4.png",
     "_site/assets/post/2026-07-20-Image-Deploy/3.png",
-    "_site/assets/post/2026-07-20-Image-Deploy/2.png",
-    "_site/assets/post/2026-07-20-Image-Deploy/1.png",
-    "_site/assets/post/2026-07-20-Image-Deploy",
-    "_site/tags/setting/index.html",
-    "_site/tags/setting",
-    "assets/post/2026-07-20-Image-Deploy/7.png",
     "assets/post/2026-07-20-이미지.md",
-    "assets/post/2026-07-20-Image-Deploy/gpedit-code.txt",
-    "assets/post/2026-07-20-이미지 배포/gpedit-코드.txt",
     "_posts/2025-09-22-AMBA AXI Interface Protocol.md",
     "_posts/2025-12-14-Dive-Deep-into-System-Programming.md",
     "무제.md",
@@ -227,8 +232,6 @@
     "_site/Virtual Memory.md",
     "assets/post/2026-01-17-Hello,-RISC-V!/dynamic_scheduling_pipeline_units.md",
     "_site/assets/post/2026-01-17-Hello,-RISC-V!/dynamic_scheduling_pipeline_units.md",
-    "_posts/index.md",
-    "datapath_with_controls_to_handle_exceptions.md",
-    "_site/datapath_with_controls_to_handle_exceptions.md"
+    "_posts/index.md"
   ]
 }
