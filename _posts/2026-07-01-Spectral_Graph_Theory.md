@@ -555,7 +555,9 @@ $$
 
 입니다.
 
-이 정점 $v$를 제거한 그래프를 $G'$라고 하고, 그 adjacency matrix를 $B$, largest eigenvalue를 $\beta_1$이라고 합시다. $B$는 $A$에서 $v$에 대응하는 행과 열을 제거한 principal submatrix이므로 Interlacing Theorem에 의해
+
+이 정점 $v$ 를 제거한 그래프를 $G'$라고 하고, 그 adjacency matrix를 $B$, largest eigenvalue를 $\beta_1$이라고 합시다. $B$는 $A$에서 $v$에 대응하는 행과 열을 제거한 principal submatrix이므로 Interlacing Theorem에 의해
+
 
 $$
 \beta_1\le\lambda_1
@@ -827,7 +829,9 @@ $$
 
 그리고 Gotsman과 Linial은 hypercube의 induced subgraph에 대한 maximum degree bound와 boolean function의 sensitivity bound가 서로 연결된다는 결과를 보였습니다. 강의 노트의 형태로 쓰면 monotone function $h:\mathbb{N}\rightarrow\mathbb{R}$에 대해 다음 두 명제가 서로 equivalent합니다.
 
-$Q_d$의 induced subgraph $H$와 그 여집합 쪽 정점들로 만든 induced subgraph $H'$에 대해 $|V_H|\ne2^{d-1}$이면
+
+  $Q_d$의 induced subgraph $H$와 그 여집합 쪽 정점들로 만든 induced subgraph $H'$에 대해 $|V_H|\ne2^{d-1}$이면
+
 
 $$
 \max(\Delta(H),\Delta(H'))\ge h(d).
