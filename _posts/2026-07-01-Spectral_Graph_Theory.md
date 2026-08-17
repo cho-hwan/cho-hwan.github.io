@@ -506,7 +506,9 @@ $$
 \end{aligned}
 $$
 
- $v(1)\ne0$이므로 양변을 $|v(1)|$로 나누면
+
+$v(1)\ne0$이므로 양변을 $\lvert v(1)\rvert$로 나누면
+
 
 $$
 \boxed{\lambda_1\le\Delta(G)}
@@ -730,7 +732,7 @@ $$
 \lambda_1(A_H)\le\Delta(H).
 $$
 
-반면 $A_H$는 $A_d$의 $|V_H|\times|V_H|$ principal submatrix이므로 Interlacing Theorem에 의해
+반면 $A_H$는 $A_d$의 $\lvert V_H\rvert \times \lvert V_H \rvert$ principal submatrix이므로 Interlacing Theorem에 의해
 
 $$
 \lambda_1(A_H)
@@ -830,7 +832,7 @@ $$
 그리고 Gotsman과 Linial은 hypercube의 induced subgraph에 대한 maximum degree bound와 boolean function의 sensitivity bound가 서로 연결된다는 결과를 보였습니다. 강의 노트의 형태로 쓰면 monotone function $h:\mathbb{N}\rightarrow\mathbb{R}$에 대해 다음 두 명제가 서로 equivalent합니다.
 
 
-  $Q_d$의 induced subgraph $H$와 그 여집합 쪽 정점들로 만든 induced subgraph $H'$에 대해 $|V_H|\ne2^{d-1}$이면
+  $Q_d$의 induced subgraph $H$와 그 여집합 쪽 정점들로 만든 induced subgraph $H'$에 대해 $\lvert V_H\rvert \ne2^{d-1}$이면
 
 
 $$
