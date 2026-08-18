@@ -881,3 +881,1195 @@ $$
 처음에는 Eigenvalue Interlacing Theorem이라는 선형대수 정리에서 출발했습니다. 이 정리를 그래프의 adjacency matrix에 적용하면, 정점을 일부 제거해 만든 induced subgraph의 eigenvalue가 원래 그래프의 eigenvalue 사이에서 어떻게 제한되는지를 알 수 있습니다. 이 관점을 이용해 clique number와 chromatic number에 대한 bound를 얻고, 정점을 하나씩 제거하는 induction과 결합하면 Wilf’s Theorem까지 이어집니다. 이후에는 같은 principal submatrix의 아이디어를 hypercube에 적용하되, 일반적인 adjacency matrix 대신 signed matrix를 사용하면서 Huang’s Theorem과 boolean function의 sensitivity 문제로 연결됩니다.
 
 이전 Moore graph에서도 비슷한 점을 느꼈지만, Spectral Graph Theory의 특징은 그래프의 연결 구조를 직접 하나씩 추적하기보다, 그 구조를 matrix로 옮긴 뒤 eigenvalue가 가질 수 있는 범위를 이용해 그래프의 성질을 알아낸다는 점인 것 같습니다. 특히 이번 내용에서는 **정점을 제거하면 principal submatrix가 만들어지고, principal submatrix의 eigenvalue는 원래 matrix의 eigenvalue와 interlace한다**는 관계가 처음부터 끝까지 계속 사용되었습니다.
+
+
+## Multiplicative Weights Update Algorithm
+
+이번 Lecture에서는 **Multiplicative Weights Update(MWU)** 알고리즘을 다룹니다.
+
+Lecture 2에서는 graph의 구조를 matrix로 옮기고 eigenvalue를 이용해 discrete structure를 분석했다면, 이번에는 반복적으로 의사결정을 내려야 하는 상황에서 **과거의 결과를 weight에 반영하면서 좋은 선택에 점점 더 큰 확률을 부여하는 방법**을 다룹니다.
+
+전체 흐름은 다음과 같습니다.
+
+$$
+\begin{array}{c}
+\text{Repeated Decision Problem} \\
+\downarrow \\
+\text{Multiplicative Weights} \\
+\downarrow \\
+\text{Performance Guarantee} \\
+\downarrow \\
+\epsilon\text{-Feasibility} \\
+\downarrow \\
+\text{Oracle} \\
+\downarrow \\
+\text{Max Flow}
+\end{array}
+$$
+
+핵심 아이디어는 단순합니다. 매 iteration마다 여러 선택지 중 하나를 골라야 하는데, 현재 어떤 선택이 가장 좋은지는 미리 알 수는 없습니다(Greedy Algorithm의 전제와 비슷하죠). 대신 각 선택지에 weight를 부여하고, 이전 iteration에서 좋은 결과를 냈던 선택지의 weight를 multiplicatively Increase시킵니다.
+
+이렇게 하면 시간이 지날수록 좋은 선택지에 더 높은 probability가 배정됩니다.
+
+---
+
+### 1. Repeated Decision Problem
+
+매 time step $t$마다 선택 가능한 decision이
+$$
+\begin{array}{c}
+\text{Repeated Decision Problem} \\
+\downarrow \\
+\text{Multiplicative Weights} \\
+\downarrow \\
+\text{Performance Guarantee} \\
+\downarrow \\
+\epsilon\text{-Feasibility} \\
+\downarrow \\
+\text{Oracle} \\
+\downarrow \\
+\text{Max Flow}
+\end{array}
+$$
+$$  
+1,\dots,N  
+$$
+
+개 있다고 합시다.
+
+Decision $i$를 time $t$에 선택했을 때 얻는 value를
+
+$$  
+v_t(i)\in[0,1]  
+$$
+
+라고 하겠습니다.
+
+중요한 점은 decision을 내리기 전에는
+
+$$  
+v_t(1),\dots,v_t(N)  
+$$
+
+을 알지 못한다는 것입니다. 즉, 현재 어떤 decision이 좋은지는 미리 알 수 없습니다. 다만 decision을 한 번 내린 뒤에는 모든 $v_t(j)$를 관찰할 수 있다고 가정합니다.
+
+Time horizon을 $T$라고 하면 우리의 benchmark는 **처음부터 끝까지 하나의 decision만 고정해서 사용했다고 가정했을 때 가장 좋았던 decision**입니다.
+
+즉
+
+$$  
+\max_{1\le j\le N}  
+\sum_{t=1}^{T}v_t(j)  
+$$
+
+와 비교합니다.
+
+우리의 목표는 online하게 decision을 선택하면서도 total value가 이 값에 가깝도록 만드는 것입니다. 특히 Lecture에서는 $v_t$가 시간에 따라 어떤 방식으로 변하는지에 대한 가정을 두지 않습니다.
+
+> 즉, 환경이 일정하거나 확률적으로 안정적일 필요가 없습니다. MWU의 목표는 value sequence가 어떻게 생성되었는지 모르더라도, 사후적으로 가장 좋았던 fixed decision과 비교했을 때 크게 뒤처지지 않는 것입니다.
+
+---
+
+### 2. Weight를 이용해 Decision을 선택하기
+
+각 decision $i$에 대해 time $t$에서 weight
+
+$$  
+w_t(i)  
+$$
+
+를 둡니다.
+
+초기에는 모든 decision을 동일하게 취급하여
+
+$$  
+w_1(i)=1  
+\qquad  
+\forall i=1,\dots,N  
+$$
+
+로 설정합니다.
+
+전체 weight의 합을
+
+\sum_{i=1}^{N}w_t(i)  
+$$
+
+라고 하면, decision $i$를 선택할 probability는
+
+\frac{w_t(i)}{W_t}  
+}  
+$$
+
+로 정의합니다.
+
+따라서
+
+$$  
+\sum_{i=1}^{N}p_t(i)=1  
+$$
+
+이고 $p_t$는 probability distribution이 됩니다.
+
+---
+
+### 3. Multiplicative Update
+
+Decision의 결과를 본 뒤 weight는
+
+(1+\epsilon v_t(i))w_t(i)  
+}  
+$$
+
+로 update합니다.
+
+여기서
+
+$$  
+0<\epsilon\le\frac12  
+$$
+
+입니다.
+
+$v_t(i)$가 클수록 $1+\epsilon v_t(i)$도 커지므로 더 좋은 value를 만든 decision의 weight가 더 빠르게 증가합니다.
+
+예를 들어
+
+$$  
+v_t(1)=1,  
+\qquad  
+v_t(2)=0.2  
+$$
+
+라면
+
+$$  
+w_{t+1}(1)  
+=(1+\epsilon)w_t(1),  
+$$
+
+$$  
+w_{t+1}(2)  
+=(1+0.2\epsilon)w_t(2)  
+$$
+
+가 되어 다음 iteration에서는 decision 1의 probability가 더 커집니다.
+
+여기서 update가 additive가 아니라 multiplicative라는 점이 중요합니다. 여러 iteration 동안 계속 좋은 결과를 보인 decision은 weight가 반복해서 곱해지기 때문에 빠르게 커집니다.
+
+실제로
+
+\prod_{t=1}^{T}(1+\epsilon v_t(i))  
+$$
+
+가 됩니다.
+
+따라서 weight는 해당 decision이 지금까지 얼마나 좋은 결과를 누적해왔는지를 multiplicative하게 저장한다고 볼 수 있습니다.
+
+---
+
+### 4. Multiplicative Weights Algorithm
+
+알고리즘을 정리하면 다음과 같습니다.
+
+```
+Initialize:
+    w_1(i) = 1 for all i = 1,...,N
+
+For t = 1,...,T:
+    W_t = sum_i w_t(i)
+    p_t(i) = w_t(i) / W_t
+
+    Pick decision i according to p_t
+    Observe v_t(1),...,v_t(N)
+
+    For every i:
+        w_{t+1}(i) = (1 + epsilon v_t(i)) w_t(i)
+```
+
+Time $t$에서 algorithm이 얻는 expected value는
+
+$$  
+\sum_{i=1}^{N}p_t(i)v_t(i)  
+$$
+
+이고, 전체 expected total value는
+
+$$  
+\boxed{  
+\sum_{t=1}^{T}  
+\sum_{i=1}^{N}  
+p_t(i)v_t(i)  
+}  
+$$
+
+입니다.
+
+이제 정말로 이 값이 best fixed decision의 total value에 가까운지를 증명합니다.
+
+---
+
+## Performance Guarantee
+
+### 5. Theorem
+
+$\epsilon\le\frac12$라고 합시다. 그러면 모든 fixed decision $j$에 대해
+
+\frac{\ln N}{\epsilon}  
+}  
+$$
+
+이 성립합니다.
+
+특히 오른쪽의 $j$를 best fixed decision으로 선택하면
+
+\frac{\ln N}{\epsilon}.  
+$$
+
+즉 algorithm의 expected reward가 best fixed decision보다 크게 뒤처지지 않습니다.
+
+---
+
+### 6. 왜 $W_{T+1}$을 보는가?
+
+이 theorem의 proof에서는 전체 weight
+
+$$  
+W_{T+1}  
+$$
+
+에 대해 upper bound와 lower bound를 각각 구한 뒤 둘을 비교합니다.
+
+이 방법이 중요한 이유는 $W_{T+1}$이 서로 다른 두 정보를 동시에 담고 있기 때문입니다.
+
+- Algorithm 전체가 얻은 expected value를 이용하면 $W_{T+1}$의 **upper bound**를 만들 수 있습니다.
+    
+- 특정 fixed decision $j$의 누적 value를 이용하면 $W_{T+1}$의 **lower bound**를 만들 수 있습니다.
+    
+
+따라서
+
+$$  
+\text{Algorithm's performance}  
+\quad\leftrightarrow\quad  
+W_{T+1}  
+\quad\leftrightarrow\quad  
+\text{Fixed decision }j  
+$$
+
+라는 연결을 만들 수 있습니다.
+
+---
+
+### 7. $W_{T+1}$의 Upper Bound
+
+먼저
+
+\sum_{i=1}^{N}w_{t+1}(i)  
+$$
+
+입니다.
+
+Update rule을 대입하면
+
+$$  
+\begin{aligned}  
+W_{t+1}  
+&=  
+\sum_{i=1}^{N}w_t(i)(1+\epsilon v_t(i))\  
+&=  
+W_t+\epsilon\sum_{i=1}^{N}w_t(i)v_t(i).  
+\end{aligned}  
+$$
+
+$w_t(i)=W_tp_t(i)$이므로
+
+W_t  
+\left(  
+1+\epsilon\sum_{i=1}^{N}p_t(i)v_t(i)  
+\right).  
+$$
+
+이제
+
+$$  
+1+x\le e^x  
+$$
+
+를 사용하면
+
+$$  
+W_{t+1}  
+\le  
+W_t  
+\exp\left(  
+\epsilon\sum_{i=1}^{N}p_t(i)v_t(i)  
+\right).  
+$$
+
+이를 $t=1$부터 $T$까지 반복하면
+
+$$  
+W_{T+1}  
+\le  
+W_1  
+\exp\left(  
+\epsilon  
+\sum_{t=1}^{T}  
+\sum_{i=1}^{N}  
+p_t(i)v_t(i)  
+\right).  
+$$
+
+초기 weight가 모두 $1$이므로
+
+$$  
+W_1=N  
+$$
+
+이고 따라서
+
+$$  
+\boxed{  
+W_{T+1}  
+\le  
+N  
+\exp\left(  
+\epsilon  
+\sum_{t=1}^{T}  
+\sum_{i=1}^{N}  
+p_t(i)v_t(i)  
+\right)  
+}  
+$$
+
+을 얻습니다.
+
+---
+
+### 8. $W_{T+1}$의 Lower Bound
+
+이번에는 특정 fixed decision $j$ 하나를 봅니다.
+
+전체 weight의 합은 특정 하나의 weight보다 항상 크므로
+
+$$  
+W_{T+1}  
+\ge  
+w_{T+1}(j).  
+$$
+
+Update rule을 반복 적용하면
+
+\prod_{t=1}^{T}(1+\epsilon v_t(j)).  
+$$
+
+Lecture에서는
+
+$$  
+1+\epsilon x  
+\ge  
+(1+\epsilon)^x,  
+\qquad  
+x\in[0,1]  
+$$
+
+를 사용합니다.
+
+따라서
+
+$$  
+\boxed{  
+W_{T+1}  
+\ge  
+(1+\epsilon)^{\sum_{t=1}^{T}v_t(j)}  
+}  
+$$
+
+입니다.
+
+---
+
+### 9. 두 Bound를 연결하기
+
+앞의 결과를 합치면
+
+$$  
+(1+\epsilon)^{\sum_{t=1}^{T}v_t(j)}  
+\le  
+N  
+\exp\left(  
+\epsilon  
+\sum_{t=1}^{T}  
+\sum_{i=1}^{N}  
+p_t(i)v_t(i)  
+\right).  
+$$
+
+양변에 logarithm을 취하면
+
+$$  
+\ln(1+\epsilon)  
+\sum_{t=1}^{T}v_t(j)  
+\le  
+\ln N  
++  
+\epsilon  
+\sum_{t=1}^{T}  
+\sum_{i=1}^{N}  
+p_t(i)v_t(i).  
+$$
+
+정리하면
+
+\frac{\ln N}{\epsilon}.  
+$$
+
+$\epsilon\le\frac12$에서
+
+$$  
+\ln(1+x)\ge x-x^2  
+$$
+
+이므로
+
+$$  
+\frac{\ln(1+\epsilon)}{\epsilon}  
+\ge  
+1-\epsilon.  
+$$
+
+결국
+
+\frac{\ln N}{\epsilon}  
+}  
+$$
+
+을 얻습니다.
+
+---
+
+### 10. 왜 Exponential과 Logarithm이 등장하는가?
+
+처음에는 update rule이
+
+(1+\epsilon v_t(i))w_t(i)  
+$$
+
+처럼 단순한 multiplication인데, proof에서는 exponential과 logarithm이 등장합니다.
+
+이유는 여러 iteration에 걸친 multiplicative growth를 다루기 위해서입니다.
+
+Weight는
+
+$$  
+\prod_{t=1}^{T}(1+\epsilon v_t(i))  
+$$
+
+처럼 product 형태로 쌓입니다.
+
+Product는 그대로 다루기 복잡하지만 exponential과 logarithm을 사용하면 sum으로 바꿀 수 있습니다.
+
+e^{\sum_t a_t}  
+$$
+
+이고
+
+\sum_t\ln a_t  
+$$
+
+이기 때문입니다.
+
+즉 multiplicative update를 cumulative sum과 비교하기 위해 exponential/logarithm inequality를 사용하는 것입니다.
+
+---
+
+## Application: Finding $\epsilon$-Feasible Solutions
+
+이제 MWU를 inequality system의 feasible solution을 찾는 문제에 적용합니다.
+
+다음 system을 생각합니다.
+
+$$  
+Ax\le e,  
+\qquad  
+x\in Q.  
+$$
+
+여기서
+
+$$  
+A\in\mathbb{R}^{m\times n},  
+$$
+
+$$  
+e\in\mathbb{R}^{m}  
+$$
+
+는 all-ones vector이고,
+
+$$  
+Q\subseteq\mathbb{R}^{n}  
+$$
+
+는 convex set입니다.
+
+또한 모든 $x\in Q$에 대해
+
+$$  
+Ax\ge0  
+$$
+
+라고 가정합니다.
+
+정확한 feasible solution 대신
+
+$$  
+Ax\le(1+\epsilon)e  
+$$
+
+를 만족하는 $x\in Q$를 찾으면 이를 $\epsilon$-feasible solution이라고 부릅니다.
+
+---
+
+### 11. 왜 MWU가 Constraint Satisfaction에 연결되는가?
+
+$Ax\le e$를 row별로 보면
+
+$$  
+(Ax)(i)\le1,  
+\qquad  
+i=1,\dots,m  
+$$
+
+이라는 $m$개의 constraint입니다.
+
+따라서 각 row를 MWU의 하나의 decision처럼 생각할 수 있습니다.
+
+현재 많이 violation되는 constraint에는 높은 weight를 주고, 다음 iteration에서는 그 constraint를 더 중요하게 보도록 만듭니다.
+
+Iteration $t$에서 oracle이 반환한 $x_t$에 대해
+
+\frac{(Ax_t)(i)}{\rho}  
+$$
+
+로 둡니다.
+
+Constraint $i$가 크게 사용될수록 $v_t(i)$가 커지고, 다음 iteration에서 그 row의 weight도 더 커집니다.
+
+---
+
+### 12. Oracle
+
+Lecture에서는 다음과 같은 oracle을 가정합니다.
+
+주어진
+
+$$  
+p\in\mathbb{R}_+^m  
+$$
+
+에 대해
+
+$$  
+p^TAx\le p^Te  
+$$
+
+를 만족하는
+
+$$  
+x\in Q  
+$$
+
+를 찾아줍니다.
+
+만약 그런 $x$가 없다면 원래 system
+
+$$  
+Ax\le e,  
+\qquad  
+x\in Q  
+$$
+
+도 infeasible하다고 판단할 수 있습니다.
+
+여기서
+
+$$  
+p^TAx  
+$$
+
+는 $x$에 대한 linear function입니다. 따라서 $Q$ 위에서 linear optimization을 쉽게 수행할 수 있다면 이 oracle도 구현할 수 있습니다.
+
+> MWU가 복잡한 feasible point를 한 번에 직접 찾는 것이 아니라, weight vector $p_t$를 계속 갱신하면서 매번 상대적으로 쉬운 weighted linear problem을 oracle에 넘기는 구조입니다.
+
+---
+
+### 13. Width $\rho$
+
+Oracle이 반환할 수 있는 $Ax$의 coordinate 중 가장 큰 값을
+
+$$  
+\boxed{  
+\rho  
+:=  
+\max_{i=1,\dots,m}  
+\max_{x\in Q\text{ returned by oracle}}  
+(Ax)(i)  
+}  
+$$
+
+로 정의합니다.
+
+이를 **width**라고 합니다.
+
+이 값이 필요한 이유는 MWU theorem에서
+
+$$  
+v_t(i)\in[0,1]  
+$$
+
+이어야 하기 때문입니다.
+
+그래서
+
+\frac{(Ax_t)(i)}{\rho}  
+$$
+
+로 normalization합니다.
+
+---
+
+### 14. Feasibility Algorithm
+
+알고리즘은 다음과 같습니다.
+
+```
+Initialize:
+    w_1(i) = 1 for i = 1,...,m
+
+For t = 1,...,T:
+    W_t = sum_i w_t(i)
+    p_t(i) = w_t(i) / W_t
+
+    Run oracle and obtain x_t in Q such that
+        p_t^T A x_t <= p_t^T e
+
+    v_t(i) = (A x_t)(i) / rho
+    w_{t+1}(i) = (1 + epsilon v_t(i)) w_t(i)
+
+Return:
+    x_bar = (1/T) sum_{t=1}^T x_t
+```
+
+마지막에 하나의 $x_t$를 반환하는 것이 아니라
+
+\frac1T\sum_{t=1}^{T}x_t  
+}  
+$$
+
+를 반환합니다.
+
+여기서 $Q$가 convex라는 조건이 중요합니다. 모든 $x_t\in Q$이고 $Q$가 convex이므로
+
+$$  
+\bar{x}\in Q  
+$$
+
+입니다.
+
+---
+
+### 15. Oracle이 주는 Bound
+
+Oracle의 정의에 의해
+
+$$  
+p_t^TAx_t  
+\le  
+p_t^Te.  
+$$
+
+$p_t$는 probability distribution이므로
+
+# \sum_{i=1}^{m}p_t(i)
+
+$$
+
+따라서
+
+$$  
+p_t^TAx_t\le1.  
+$$
+
+이제
+
+\frac{(Ax_t)(i)}{\rho}  
+$$
+
+이므로
+
+$$  
+\begin{aligned}  
+\sum_{i=1}^{m}p_t(i)v_t(i)  
+&=  
+\frac1\rho  
+\sum_{i=1}^{m}p_t(i)(Ax_t)(i)\  
+&=  
+\frac1\rho p_t^TAx_t\  
+&\le  
+\frac1\rho.  
+\end{aligned}  
+$$
+
+따라서
+
+$$  
+\boxed{  
+\sum_{t=1}^{T}  
+\sum_{i=1}^{m}p_t(i)v_t(i)  
+\le  
+\frac{T}{\rho}  
+}  
+$$
+
+입니다.
+
+---
+
+### 16. MWU Theorem을 각 Constraint에 적용하기
+
+앞에서 증명한 theorem에 의해 임의의 row $j$에 대해
+
+\frac{\ln m}{\epsilon}.  
+$$
+
+왼쪽은 $T/\rho$ 이하였으므로
+
+\frac{\ln m}{\epsilon}.  
+$$
+
+$v_t(j)$를 대입하면
+
+\frac{\ln m}{\epsilon}.  
+$$
+
+그리고
+
+\frac1T\sum_{t=1}^{T}x_t  
+$$
+
+이므로 linearity에 의해
+
+T(A\bar{x})(j).  
+$$
+
+따라서
+
+$$  
+(1-\epsilon)  
+\frac{T}{\rho}  
+(A\bar{x})(j)  
+\le  
+\frac{T}{\rho}  
++  
+\frac{\ln m}{\epsilon}.  
+$$
+
+---
+
+### 17. Iteration 수 $T$
+
+Lecture에서는
+
+\frac{\rho\ln m}{\epsilon^2}  
+}  
+$$
+
+로 설정합니다.
+
+이를 대입하면
+
+$$  
+(A\bar{x})(j)  
+\le  
+\frac{1}{1-\epsilon}  
+\left(  
+1+  
+\frac{\rho\ln m}{\epsilon T}  
+\right)  
+$$
+
+이고
+
+\epsilon  
+$$
+
+이므로
+
+$$  
+(A\bar{x})(j)  
+\le  
+\frac{1+\epsilon}{1-\epsilon}.  
+$$
+
+$\epsilon\le\frac13$이면 Lecture에서 사용하는 bound에 의해
+
+$$  
+\frac{1+\epsilon}{1-\epsilon}  
+\le  
+1+4\epsilon.  
+$$
+
+따라서
+
+$$  
+\boxed{  
+A\bar{x}  
+\le  
+(1+4\epsilon)e  
+}  
+$$
+
+를 얻습니다.
+
+즉 $\bar{x}$는 approximate feasible solution입니다.
+
+---
+
+### 18. Feasibility Algorithm의 핵심
+
+Constraint가
+
+$$  
+(Ax)(i)\le1  
+$$
+
+형태로 여러 개 존재합니다.
+
+현재 크게 violation되는 constraint $i$는
+
+\frac{(Ax_t)(i)}{\rho}  
+$$
+
+가 큽니다.
+
+그러면 다음 iteration에서
+
+(1+\epsilon v_t(i))w_t(i)  
+$$
+
+가 크게 증가하고, 따라서 $p_{t+1}(i)$도 커집니다.
+
+다음 oracle call에서는
+
+$$  
+p_{t+1}^TAx  
+$$
+
+를 작게 만들어야 하므로 weight가 커진 constraint가 더 중요하게 반영됩니다.
+
+즉
+
+$$  
+\boxed{  
+\text{violation}  
+\rightarrow  
+\text{larger weight}  
+\rightarrow  
+\text{larger importance in oracle}  
+\rightarrow  
+\text{future correction}  
+}  
+$$
+
+이라는 feedback loop가 만들어집니다.
+
+---
+
+## Application: Max Flow in Unit Capacity Graphs
+
+Lecture 마지막에서는 이 framework를 unit capacity graph의 Maximum Flow에 적용합니다.
+
+Graph
+
+$$  
+G=(V,E)  
+$$
+
+가 있고 모든 edge의 capacity가
+
+$$  
+u(i,j)=1  
+$$
+
+이라고 합시다.
+
+Source를 $s$, sink를 $t$라고 하고 $s$에서 $t$로 보내는 maximum flow를 찾고 싶습니다.
+
+하지만 앞에서 만든 algorithm은 optimization algorithm이 아니라 feasibility checker입니다. 따라서 maximum flow value를 직접 찾기보다
+
+$$  
+\text{value }k\text{의 flow가 존재하는가?}  
+$$
+
+라는 질문을 반복해서 해결합니다.
+
+---
+
+### 19. Binary Search로 Optimization을 Feasibility로 바꾸기
+
+Edge 수를
+
+$$  
+m=|E|  
+$$
+
+라고 합시다.
+
+모든 edge capacity가 $1$이므로 maximum flow value의 간단한 upper bound는 $m$입니다.
+
+따라서 value $k$가 feasible한지 검사할 수 있다면 $k$에 대해 binary search를 수행할 수 있습니다.
+
+즉
+
+$$  
+\boxed{  
+\text{Max Flow Optimization}  
+\rightarrow  
+\text{Repeated Feasibility Check}  
+}  
+$$
+
+로 바꿉니다.
+
+Lecture에서는 약
+
+$$  
+\left\lceil\log_2m\right\rceil  
+$$
+
+번의 feasibility check를 사용합니다.
+
+---
+
+### 20. Max Flow를 $Ax\le e$, $x\in Q$로 표현하기
+
+각 edge $(i,j)$의 flow를
+
+$$  
+x(i,j)  
+$$
+
+라고 합시다.
+
+모든 edge capacity가 $1$이므로
+
+$$  
+x(i,j)\le1.  
+$$
+
+따라서 capacity constraint를 담당하는 $A$는 identity matrix로 둘 수 있습니다.
+
+$$  
+A=I.  
+$$
+
+그러면
+
+$$  
+Ax\le e  
+$$
+
+는 정확히 모든 capacity constraint를 표현합니다.
+
+이제 $Q$에는 나머지 flow 조건을 넣습니다.
+
+먼저
+
+$$  
+x\ge0  
+$$
+
+이어야 하고, $s,t$가 아닌 모든 vertex에서는 flow conservation이 성립해야 합니다.
+
+# \sum_{j:(j,i)\in E}x(j,i)
+
+0,  
+\qquad  
+i\neq s,t.  
+$$
+
+또한 source에서 나가는 net flow가 원하는 flow value $k$가 되어야 합니다.
+
+# \sum_{j:(j,s)\in E}x(j,s)
+
+k.  
+$$
+
+따라서
+
+\left{  
+x\ge0:  
+\begin{array}{l}  
+\text{flow conservation holds for }i\neq s,t,\  
+\text{net flow from }s\text{ equals }k  
+\end{array}  
+\right}.  
+$$
+
+즉
+
+- $Ax\le e$는 capacity constraint,
+    
+- $x\in Q$는 flow conservation과 target flow value
+    
+
+를 담당합니다.
+
+---
+
+### 21. Max Flow에서 Oracle은 무엇을 하는가?
+
+MWU feasibility framework에서는 주어진
+
+$$  
+p\ge0  
+$$
+
+에 대해
+
+$$  
+p^TAx  
+$$
+
+를 작게 만드는 $x\in Q$를 찾아야 합니다.
+
+여기서는
+
+$$  
+A=I  
+$$
+
+이므로
+
+p^Tx.  
+$$
+
+각 edge $(i,j)$에
+
+$$  
+d(i,j)=p(i,j)  
+$$
+
+라는 length를 부여했다고 생각할 수 있습니다.
+
+그러면 oracle problem은 value $k$의 flow를 보내되 weighted cost $p^Tx$를 최소화하는 문제가 됩니다.
+
+Lecture에서는 capacity constraint가 $Q$ 안에는 아직 들어있지 않기 때문에, flow를 더 긴 path로 보낼 이유가 없다고 설명합니다. 따라서 minimum은 $p(i,j)$를 edge length로 보았을 때 shortest path를 따라 flow를 보내는 방식으로 얻을 수 있습니다.
+
+즉
+
+$$  
+\boxed{  
+\text{MWU weight }p  
+\rightarrow  
+\text{edge length}  
+\rightarrow  
+\text{shortest path oracle}  
+}  
+$$
+
+라는 연결입니다.
+
+---
+
+## 정리
+
+이번 Lecture의 시작은 매우 일반적인 repeated decision problem이었습니다.
+
+매 time step에서 어떤 decision이 좋은지 미리 알 수 없지만, 각 decision에 weight를 두고
+
+(1+\epsilon v_t(i))w_t(i)  
+$$
+
+와 같이 update하면 좋은 결과를 계속 낸 decision의 probability가 자연스럽게 증가합니다.
+
+그리고 total weight
+
+\sum_iw_t(i)  
+$$
+
+를 분석하면서 algorithm 전체 performance로 $W_{T+1}$의 upper bound를 만들고, 특정 fixed decision의 performance로 lower bound를 만든 뒤 둘을 비교하여
+
+\frac{\ln N}{\epsilon}  
+$$
+
+라는 guarantee를 얻었습니다.
+
+여기서 끝나지 않고 matrix inequality
+
+$$  
+Ax\le e,  
+\qquad  
+x\in Q  
+$$
+
+의 각 row를 하나의 MWU decision으로 해석했습니다.
+
+Constraint가 많이 violation될수록 그 row의 weight를 증가시키고, 다음 oracle call에서는 해당 constraint를 더 중요하게 다루도록 만들었습니다.
+
+결국 여러 iteration에서 얻은
+
+$$  
+x_1,\dots,x_T  
+$$
+
+를 평균내어
+
+\frac1T\sum_{t=1}^{T}x_t  
+$$
+
+를 만들면 convexity 덕분에 $\bar{x}\in Q$가 유지되고,
+
+$$  
+A\bar{x}  
+\le  
+(1+4\epsilon)e  
+$$
+
+라는 approximate feasibility를 얻을 수 있었습니다.
+
+마지막으로 unit capacity Max Flow에서는 optimization problem을 "value $k$의 flow가 존재하는가?"라는 feasibility problem으로 바꾸고 binary search를 사용했습니다.
+
+Capacity constraint는 $Ax\le e$에 넣고, flow conservation과 target flow value는 convex set $Q$에 넣었습니다. 그리고 MWU가 만들어내는 weight vector를 edge length로 해석하면 oracle은 shortest path problem으로 바뀝니다.
+
+이번 Lecture에서 흥미로웠던 점은 Multiplicative Weights가 단순히 여러 선택지 중 좋은 선택을 점점 더 자주 고르는 알고리즘으로 끝나지 않는다는 것입니다.
+
+처음에는
+
+$$  
+\text{decision}  
+\leftrightarrow  
+\text{weight}  
+$$
+
+라는 구조였지만, constraint satisfaction에서는
+
+$$  
+\text{decision}  
+\leftrightarrow  
+\text{constraint}  
+$$
+
+로 해석되고, Max Flow에서는 다시
+
+$$  
+\text{weight}  
+\leftrightarrow  
+\text{edge length}  
+$$
+
+로 해석됩니다.
+
+같은 update rule을 유지한 채 문제의 구성 요소가 무엇을 의미하는지만 바꾸면서 전혀 다른 optimization problem에 적용할 수 있다는 점이 이번 Lecture의 핵심으로 보입니다.
