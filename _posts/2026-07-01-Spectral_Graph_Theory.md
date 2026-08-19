@@ -26,7 +26,7 @@ author: ch
 
 *처음 나오는 용어의 경우 직역을 포함해서 서술합니다. 그러나 용어는 기본적으로 영문을 사용합니다.*
 
-## Moore graphs and the Hoffman–Singleton theorem
+## Spectral Analysis of Moore Graphs
 
 그래프의 지름(diameter) $D$는 그래프의 어떤 노드에서 다른 어떤 노드로든 이동할 수 있음을 보장하기 위해 필요한 최소 이동 거리입니다. 아래와 같이 정리할 수 있습니다.
 
@@ -242,7 +242,7 @@ $$
 
 이산과 연속의 경계와 관계에 대해 느낄 수 있었던 참 좋은 경험이였고 즐거웠습니다.
 
-## Eigenvalue Interlacing - Application to Huang's Theorem
+## Huang's Theorem
 
 이번 주제 또한 이전 주제와 비슷하게 Matrix Eigenvalue에 관한 정리 하나가 그래프 이론의 문제를 어떻게 해결하는지 보여줍니다.
 
@@ -883,7 +883,7 @@ $$
 이전 Moore graph에서도 비슷한 점을 느꼈지만, Spectral Graph Theory의 특징은 그래프의 연결 구조를 직접 하나씩 추적하기보다, 그 구조를 matrix로 옮긴 뒤 eigenvalue가 가질 수 있는 범위를 이용해 그래프의 성질을 알아낸다는 점인 것 같습니다. 특히 이번 내용에서는 **정점을 제거하면 principal submatrix가 만들어지고, principal submatrix의 eigenvalue는 원래 matrix의 eigenvalue와 interlace한다**는 관계가 처음부터 끝까지 계속 사용되었습니다.
 
 
-## Lecture 3 - Multiplicative Weights Update Algorithm
+## Multiplicative Weights Update Algorithm
 
 이번 Lecture에서는 **Multiplicative Weights Update(MWU)**라는 알고리즘을 다룹니다.
 
